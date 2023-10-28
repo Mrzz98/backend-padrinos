@@ -13,20 +13,21 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('nombre_usuario', 'contrasena');
-
+    
         if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-
+            // Obtén el usuario autenticado como instancia de tu modelo Usuario
+            $user = Usuario::find(Auth::user()->id);
+    
             // Genera un token de acceso personalizado
-            $token = Str::random(60); // Genera una cadena aleatoria para el token
-
-            // Asocia el token al usuario (puedes guardar esto en la base de datos si lo deseas)
+            $token = Str::random(60);
+    
+            // Asocia el token al usuario y guárdalo en la base de datos
             $user->api_token = $token;
-            // $user->save();
-
+            $user->save();
+    
             return response()->json(['user' => $user, 'token' => $token], 200);
         }
-
+    
         return response()->json(['error' => 'Credenciales incorrectas'], 401);
     }
 }
