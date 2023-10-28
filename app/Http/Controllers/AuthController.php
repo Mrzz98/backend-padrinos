@@ -9,26 +9,44 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-
     public function login(Request $request)
     {
-        $credentials = $request->only('nombre_usuario', 'contrasena');
-    
-        if (Auth::attempt($credentials)) {
-            return response()->json(['user' => 'A Eeee'], 200);
-            // Obtén el usuario autenticado como instancia de tu modelo Usuario
-            // $user = Usuario::find(Auth::user()->id);
-    
-            // // Genera un token de acceso personalizado
-            // $token = Str::random(60);
-    
-            // // Asocia el token al usuario y guárdalo en la base de datos
-            // $user->api_token = $token;
-            // $user->save();
-    
-            // return response()->json(['user' => $user, 'token' => $token], 200);
+        $jsonData = $request->json()->all();
+
+        try {
+            // Busca al usuario por su nombre de usuario
+            $user = Usuario::where('nombre_usuario', $jsonData['nombre_usuario'])->first();
+
+            if (!$user) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Usuario no encontrado',
+                ], 401);
+            }
+
+            // Verifica las credenciales y genera el token
+            $token = auth()->attempt([
+                'nombre_usuario' => $jsonData['nombre_usuario'],
+                'password' => $jsonData['contrasena'],
+            ]);
+
+            if (!$token) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Credenciales incorrectas',
+                ], 401);
+            }
+
+            return response()->json([
+                'status' => 'ok',
+                'message' => 'Inicio de sesión exitoso',
+                'user' => $token,
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $exception->getMessage(),
+            ], 500);
         }
-    
-        return response()->json(['error' => 'Credenciales incorrectas'], 401);
     }
 }
