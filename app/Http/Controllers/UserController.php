@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use app\Http\Controllers\Controller;
+use App\Http\Controllers\Controller;
 // use app\Http\Models\Usuario; // Asegúrate de importar el modelo Usuario desde la ubicación correcta
 use App\Usuario as Usuario;
 
