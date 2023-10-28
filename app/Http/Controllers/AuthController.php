@@ -11,9 +11,9 @@ class AuthController extends Controller
 
         if (auth()->attempt($credentials)) {
             $user = auth()->user();
-            $token = $user->createToken('MyApp')->accessToken;
+            // $token = $user->createToken('MyApp')->accessToken;
 
-            return response()->json(['token' => $token], 200);
+            // return response()->json(['token' => $token], 200);
         } else {
             return response()->json(['error' => 'Credenciales incorrectas'], 401);
         }
