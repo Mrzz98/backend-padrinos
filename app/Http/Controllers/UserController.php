@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-// use app\Http\Models\Usuario; // Asegúrate de importar el modelo Usuario desde la ubicación correcta
-use App\Usuario as Usuario;
+use App\Models\Usuario;
 
 class UserController extends Controller
 {
@@ -16,3 +15,4 @@ class UserController extends Controller
         return response()->json($usuarios, 200);
     }
 }
+
