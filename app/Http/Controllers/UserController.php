@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use App\Models\Usuario; // Asegúrate de importar el modelo Usuario desde la ubicación correcta
+use app\Http\Controllers\Controller;
+// use app\Http\Models\Usuario; // Asegúrate de importar el modelo Usuario desde la ubicación correcta
+use App\Usuario as Usuario;
 
 class UserController extends Controller
 {
