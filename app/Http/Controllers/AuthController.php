@@ -1,21 +1,24 @@
 <?php
+namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
-use app\Http\Controllers\Controller;
+use App\Models\Usuario;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 
 class AuthController extends Controller
 {
+
     public function login(Request $request)
     {
-        // Valida los datos de inicio de sesión
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only('nombre_usuario', 'contrasena');
 
-        if (auth()->attempt($credentials)) {
-            $user = auth()->user();
-            // $token = $user->createToken('MyApp')->accessToken;
-
-            // return response()->json(['token' => $token], 200);
-        } else {
-            return response()->json(['error' => 'Credenciales incorrectas'], 401);
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            $token = $user->createToken('MyToken')->plainTextToken;
+            return response()->json(['token' => $token], 200);
         }
+
+        return response()->json(['message' => 'Credenciales incorrectas'], 401);
     }
 }
