@@ -15,8 +15,8 @@ class AuthController extends Controller
         $credentials = $request->only('nombre_usuario', 'contrasena');
     
         if (Auth::attempt($credentials)) {
-            return response()->json(['error' => 'aaaa incorrectas'], 401);
-            // // Obtén el usuario autenticado como instancia de tu modelo Usuario
+            return response()->json(['user' => 'A Eeee'], 200);
+            // Obtén el usuario autenticado como instancia de tu modelo Usuario
             // $user = Usuario::find(Auth::user()->id);
     
             // // Genera un token de acceso personalizado
