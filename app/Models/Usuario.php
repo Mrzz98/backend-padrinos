@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 // use Laravel\Passport\HasApiTokens;
-// use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Usuario extends Model
+class Usuario extends Authenticatable
 {
     // use HasApiTokens;
     protected $table = 'Usuario'; // Nombre de la tabla en la base de datos
