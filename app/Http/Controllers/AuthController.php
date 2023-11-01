@@ -9,6 +9,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Validator;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth as FacadesJWTAuth;
 use Tymon\JWTAuth\JWTAuth as JWTAuth;
 
@@ -79,6 +80,34 @@ class AuthController extends Controller
         
             return response()->json(compact('token'));
         }
+
+        public function register(Request $request)
+        {
+            $validator = Validator::make($request->all(), [
+                'nombre' => 'required|string|between:2,100',
+                'nombre_usuario' => 'required|string|max:100|unique:usuario',
+                'contrasena' => 'required|string|confirmed|min:6',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 400);
+            }
+
+            $user = Usuario::create([
+                'nombre' => $request->get('nombre'),
+                'nombre_usuario' => $request->get('nombre_usuario'),
+                'contrasena' => Hash::make($request->get('contrasena')),
+            ]);
+
+            $token = FacadesJWTAuth::fromUser($user);
+
+            return response()->json([
+                'message' => 'Usuario registrado exitosamente',
+                'user' => $user,
+                'token' => $token,
+            ], 200);
+        }
+
     // public function getAuthenticatedUser()
     // {
     //     try {
