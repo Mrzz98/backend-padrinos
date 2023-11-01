@@ -53,23 +53,28 @@ class AuthController extends Controller
     //     }
     // }
 
-    public function login(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'nombre_usuario' => 'required',
-        'contrasena' => 'required',
-    ]);
-
-    if ($validator->fails()) {
-        return response()->json($validator->errors(), 422);
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);//login, register methods won't go through the api guard
     }
 
-    if (! $token = auth()->attempt($validator->validated())) {
-        return response()->json(['error' => 'Unauthorized'], 401);
-    }
+        public function login(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nombre_usuario' => 'required',
+            'contrasena' => 'required',
+        ]);
 
-    return response()->json(compact('token'));
-}
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        if (! $token = auth()->attempt($validator->validated())) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        return response()->json(compact('token'));
+    }
     // public function getAuthenticatedUser()
     // {
     //     try {
