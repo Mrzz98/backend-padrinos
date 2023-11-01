@@ -68,16 +68,16 @@ class AuthController extends Controller
                 'contrasena' => 'required',
             ]);
 
-            $jwtAuth = FacadesJWTAuth::getFacadeRoot();
-            
             if ($validator->fails()) {
                 return response()->json($validator->errors(), 422);
             }
-        
+
+            $jwtAuth = FacadesJWTAuth::getFacadeRoot();
+
             if (! $token = FacadesJWTAuth::attempt($validator->validated())) {
                 return response()->json(['error' => 'Credenciales incorrectas'], 401);
             }
-        
+
             return response()->json(compact('token'));
         }
 
