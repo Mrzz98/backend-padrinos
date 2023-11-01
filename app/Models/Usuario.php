@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 
-class Usuario extends Authenticatable implements AuthenticatableContract
+class Usuario extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory;
     // use HasApiTokens;
@@ -27,6 +28,10 @@ class Usuario extends Authenticatable implements AuthenticatableContract
         return $this->contrasena;
     }
 
+    protected $hidden = [
+        'contrasena', 'remember_token',
+    ];
+
     protected $fillable = [
         'nombre',
         'apellido',
@@ -35,4 +40,13 @@ class Usuario extends Authenticatable implements AuthenticatableContract
         'correo_electronico',
         'rol',
     ];
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 }
