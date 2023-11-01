@@ -15,7 +15,7 @@ return [
 
     'defaults' => [
         'guard' => 'web',
-        'passwords' => 'users',
+        'passwords' => 'usuarios',
     ],
 
     /*
@@ -89,7 +89,7 @@ return [
     */
 
     'passwords' => [
-        'users' => [
+        'usuarios' => [
             'provider' => 'users',
             'table' => 'password_reset_tokens',
             'expire' => 60,
