@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Str;
 use App\Models\Usuario;
 use Illuminate\Support\Facades\Auth;
-// use JWTAuth;
+use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Validator;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth as FacadesJWTAuth;
-use Tymon\JWTAuth\JWTAuth as JWTAuth;
+// use Tymon\JWTAuth\JWTAuth as JWTAuth;
 
 class AuthController extends Controller
 {
