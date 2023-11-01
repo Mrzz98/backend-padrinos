@@ -124,7 +124,7 @@ class AuthController extends Controller
             ], 200);
         }
 
-        public function getAuthenticatedUser()
+        public function getaccount()
         {
             $jwtAuth = app('JWTAuth');
             try {
