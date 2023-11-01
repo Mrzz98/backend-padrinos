@@ -5,8 +5,11 @@ use Illuminate\Support\Str;
 use App\Models\Usuario;
 use Illuminate\Support\Facades\Auth;
 use JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\JWTException as JWTException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException as TokenInvalidException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException as TokenExpiredException;
 use Illuminate\Support\Facades\Validator;
+
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -55,7 +58,7 @@ class AuthController extends Controller
     //         ], 500);
     //     }
     // }
-
+        
         public function __construct()
         {
             $this->middleware('auth:api', ['except' => ['login', 'register']]);//login, register methods won't go through the api guard
@@ -78,12 +81,8 @@ class AuthController extends Controller
                 unset($data['contrasena']); // Elimina el atributo anterior si es necesario
             }
 
-            // $jwtCredentials = [
-            //     'nombre_usuario' => $request->nombre_usuario,
-            //     'password' => $request->contrasena,
-            // ];
             $jwtCredentials = $data;
-            // $jwtAuth = JWTAuth::getFacadeRoot();
+
             $jwtAuth = app('JWTAuth');
             if (! $token = $jwtAuth::attempt($jwtCredentials)) {
                 return response()->json(['error' => 'Credenciales incorrectas'], 401);
@@ -98,6 +97,9 @@ class AuthController extends Controller
                 'nombre' => 'required|string|between:2,100',
                 'nombre_usuario' => 'required|string|max:100|unique:usuario',
                 'contrasena' => 'required|string|confirmed|min:6',
+                'apellido' => 'required|string|between:2,100',
+                'correo_electronico' => 'required|email',
+                'rol' => 'required|string|between:1,100'
             ]);
 
             if ($validator->fails()) {
@@ -108,6 +110,9 @@ class AuthController extends Controller
                 'nombre' => $request->get('nombre'),
                 'nombre_usuario' => $request->get('nombre_usuario'),
                 'contrasena' => Hash::make($request->get('contrasena')),
+                'apellido' => $request->get('apellido'),
+                'correo_electronico' => $request->get('correo_electronico'),
+                'rol' => $request->get('rol')
             ]);
 
             $token = FacadesJWTAuth::fromUser($user);
@@ -119,19 +124,20 @@ class AuthController extends Controller
             ], 200);
         }
 
-    // public function getAuthenticatedUser()
-    // {
-    //     try {
-    //         if (!$user = JWTAuth::parseToken()->authenticate()) {
-    //                 return response()->json(['user_not_found'], 404);
-    //         }
-    //         } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-    //                 return response()->json(['token_expired'], $e->getStatusCode());
-    //         } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-    //                 return response()->json(['token_invalid'], $e->getStatusCode());
-    //         } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
-    //                 return response()->json(['token_absent'], $e->getStatusCode());
-    //         }
-    //         return response()->json(compact('user'));
-    // }
+        public function getAuthenticatedUser()
+        {
+            $jwtAuth = app('JWTAuth');
+            try {
+                if (!$user = $jwtAuth::parseToken()->authenticate()) {
+                        return response()->json(['user_not_found'], 404);
+                }
+                } catch (TokenExpiredException $e) {
+                        return response()->json(['token_expired'], $e->getCode());
+                } catch (TokenInvalidException $e) {
+                        return response()->json(['token_invalid'], $e->getCode());
+                } catch (JWTException $e) {
+                        return response()->json(['token_absent'], $e->getCode());
+                }
+                return response()->json(compact('user'));
+        }
 }
