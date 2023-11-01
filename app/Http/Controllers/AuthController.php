@@ -9,6 +9,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Validator;
 
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth as FacadesJWTAuth;
 
 class AuthController extends Controller
 {
@@ -53,28 +54,28 @@ class AuthController extends Controller
     //     }
     // }
 
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);//login, register methods won't go through the api guard
-    }
+        public function __construct()
+        {
+            $this->middleware('auth:api', ['except' => ['login', 'register']]);//login, register methods won't go through the api guard
+        }
 
         public function login(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'nombre_usuario' => 'required',
-            'contrasena' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+        {
+            $validator = Validator::make($request->all(), [
+                'nombre_usuario' => 'required',
+                'contrasena' => 'required',
+            ]);
+        
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 422);
+            }
+        
+            if (! $token = FacadesJWTAuth::attempt($validator->validated())) {
+                return response()->json(['error' => 'Credenciales incorrectas'], 401);
+            }
+        
+            return response()->json(compact('token'));
         }
-
-        if (! $token = auth()->attempt($validator->validated())) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-
-        return response()->json(compact('token'));
-    }
     // public function getAuthenticatedUser()
     // {
     //     try {
