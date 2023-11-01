@@ -71,7 +71,10 @@ class AuthController extends Controller
             if ($validator->fails()) {
                 return response()->json($validator->errors(), 422);
             }
-
+            $jwtCredentials = [
+                'nombre_usuario' => $request->nombre_usuario,
+                'password' => $request->contrasena,
+            ];
             // $jwtAuth = JWTAuth::getFacadeRoot();
             $jwtAuth = app('JWTAuth');
             if (! $token = $jwtAuth::attempt($validator->validated())) {
