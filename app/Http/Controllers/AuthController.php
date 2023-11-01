@@ -67,21 +67,21 @@ class AuthController extends Controller
                 'nombre_usuario' => 'required',
                 'contrasena' => 'required',
             ]);
+            
 
-            return response()->json($validator->validated());
-
-            // if ($validator->fails()) {
-            //     return response()->json($validator->errors(), 422);
-            // }
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 422);
+            }
             // $jwtCredentials = [
             //     'nombre_usuario' => $request->nombre_usuario,
             //     'password' => $request->contrasena,
             // ];
-            // // $jwtAuth = JWTAuth::getFacadeRoot();
-            // $jwtAuth = app('JWTAuth');
-            // if (! $token = $jwtAuth::attempt($jwtCredentials)) {
-            //     return response()->json(['error' => 'Credenciales incorrectas'], 401);
-            // }
+            $jwtCredentials = $validator->validated();
+            // $jwtAuth = JWTAuth::getFacadeRoot();
+            $jwtAuth = app('JWTAuth');
+            if (! $token = $jwtAuth::attempt($jwtCredentials)) {
+                return response()->json(['error' => 'Credenciales incorrectas'], 401);
+            }
 
             return response()->json(compact('token'));
         }
