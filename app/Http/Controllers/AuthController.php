@@ -77,7 +77,7 @@ class AuthController extends Controller
             ];
             // $jwtAuth = JWTAuth::getFacadeRoot();
             $jwtAuth = app('JWTAuth');
-            if (! $token = $jwtAuth::attempt($validator->validated())) {
+            if (! $token = $jwtAuth::attempt($jwtCredentials)) {
                 return response()->json(['error' => 'Credenciales incorrectas'], 401);
             }
 
