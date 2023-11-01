@@ -72,9 +72,9 @@ class AuthController extends Controller
                 return response()->json($validator->errors(), 422);
             }
 
-            $jwtAuth = FacadesJWTAuth::getFacadeRoot();
+            // $jwtAuth = JWTAuth::getFacadeRoot();
 
-            if (! $token = FacadesJWTAuth::attempt($validator->validated())) {
+            if (! $token = JWTAuth::attempt($validator->validated())) {
                 return response()->json(['error' => 'Credenciales incorrectas'], 401);
             }
 
