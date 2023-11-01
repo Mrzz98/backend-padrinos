@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'api' => [
+            'driver' => 'jwt',
+            'provider' => 'users',
+        ],
     ],
 
     /*
@@ -65,10 +69,11 @@ return [
             'model' => App\Models\Usuario::class,
         ],
     ],
-    'api' => [
-        'driver' => 'jwt',
-        'provider' => 'users',
-    ],
+    // 'api' => [
+    //     'driver' => 'jwt',
+    //     'provider' => 'users',
+    // ],
+
     /*
     |--------------------------------------------------------------------------
     | Resetting Passwords
