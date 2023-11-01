@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth as FacadesJWTAuth;
+use Tymon\JWTAuth\JWTAuth as JWTAuthJWTAuth;
 
 class AuthController extends Controller
 {
@@ -70,7 +71,7 @@ class AuthController extends Controller
                 return response()->json($validator->errors(), 422);
             }
         
-            if (! $token = FacadesJWTAuth::attempt($validator->validated())) {
+            if (! $token = JWTAuthJWTAuth::attempt($validator->validated())) {
                 return response()->json(['error' => 'Credenciales incorrectas'], 401);
             }
         

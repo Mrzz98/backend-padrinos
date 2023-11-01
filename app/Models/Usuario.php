@@ -14,7 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class Usuario extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory;
+    use HasApiTokens, HasFactory, Notifiable;
     // use HasApiTokens;
     protected $table = 'usuario'; // Nombre de la tabla en la base de datos
     protected $primaryKey = 'id'; // Clave primaria
