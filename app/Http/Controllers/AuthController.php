@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Str;
 use App\Models\Usuario;
 use Illuminate\Support\Facades\Auth;
-use JWTAuth;
+// use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Validator;
 
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth as FacadesJWTAuth;
-use Tymon\JWTAuth\JWTAuth as JWTAuthJWTAuth;
+use Tymon\JWTAuth\JWTAuth as JWTAuth;
 
 class AuthController extends Controller
 {
@@ -66,12 +66,14 @@ class AuthController extends Controller
                 'nombre_usuario' => 'required',
                 'contrasena' => 'required',
             ]);
-        
+
+            $jwtAuth = FacadesJWTAuth::getFacadeRoot();
+            
             if ($validator->fails()) {
                 return response()->json($validator->errors(), 422);
             }
         
-            if (! $token = JWTAuthJWTAuth::attempt($validator->validated())) {
+            if (! $token = FacadesJWTAuth::attempt($validator->validated())) {
                 return response()->json(['error' => 'Credenciales incorrectas'], 401);
             }
         
