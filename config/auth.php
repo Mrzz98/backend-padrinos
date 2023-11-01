@@ -90,7 +90,7 @@ return [
 
     'passwords' => [
         'usuarios' => [
-            'provider' => 'users',
+            'provider' => 'usuarios',
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,
