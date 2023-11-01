@@ -65,7 +65,10 @@ return [
             'model' => App\Models\Usuario::class,
         ],
     ],
-    
+    'api' => [
+        'driver' => 'jwt',
+        'provider' => 'users',
+    ],
     /*
     |--------------------------------------------------------------------------
     | Resetting Passwords

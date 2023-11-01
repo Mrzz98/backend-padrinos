@@ -6,6 +6,7 @@ use App\Models\Usuario;
 use Illuminate\Support\Facades\Auth;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Support\Facades\Validator;
 
 use Illuminate\Http\Request;
 
@@ -53,20 +54,22 @@ class AuthController extends Controller
     // }
 
     public function login(Request $request)
-    {
-        $credentials = $request->only('nombre_usuario', 'contrasena');
+{
+    $validator = Validator::make($request->all(), [
+        'nombre_usuario' => 'required',
+        'contrasena' => 'required',
+    ]);
 
-        try {
-            if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'Credenciales inválidas'], 400);
-            }
-        } catch (JWTException $e) {
-            return response()->json(['error' => $e], 500);
-        }
-
-        return response()->json(compact('token'));
+    if ($validator->fails()) {
+        return response()->json($validator->errors(), 422);
     }
 
+    if (! $token = auth()->attempt($validator->validated())) {
+        return response()->json(['error' => 'Unauthorized'], 401);
+    }
+
+    return response()->json(compact('token'));
+}
     // public function getAuthenticatedUser()
     // {
     //     try {
