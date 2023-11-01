@@ -68,7 +68,7 @@ class AuthController extends Controller
                 'contrasena' => 'required',
             ]);
 
-            return response()->json($validator);
+            return response()->json($validator->validated());
 
             // if ($validator->fails()) {
             //     return response()->json($validator->errors(), 422);
