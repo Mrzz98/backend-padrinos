@@ -73,7 +73,7 @@ class AuthController extends Controller
             }
 
             // $jwtAuth = JWTAuth::getFacadeRoot();
-            $jwtAuth = app('Tymon\JWTAuth\JWTAuth');
+            $jwtAuth = app('JWTAuth');
             if (! $token = $jwtAuth::attempt($validator->validated())) {
                 return response()->json(['error' => 'Credenciales incorrectas'], 401);
             }
