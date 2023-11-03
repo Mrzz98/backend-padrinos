@@ -90,7 +90,7 @@ class AuthController extends Controller
         }
 
         // return response()->json(compact('token'));
-        return $this()->respondWithToken($token);
+        return $this->respondWithToken($token);
     }
 
     public function register(Request $request)
