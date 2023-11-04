@@ -8,8 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class EstadoEvento extends Model
 {
     use HasFactory;
-    public $timestamps = True; // Si no tienes las columnas created_at y updated_at
-    protected $fillable = [
-        'nombre',
-    ];
+    protected $table = 'estado_evento'; // Nombre personalizado de la tabla
+
+    protected $fillable = ['nombre']; // Campos que se pueden llenar
+
+    public $timestamps = true; // Habilita el registro de timestamps
+
+    // Relación con EventoRecaudacion (uno a muchos)
+    public function eventosRecaudacion()
+    {
+        return $this->hasMany(EventoRecaudacion::class, 'id_estado', 'id');
+    }
 }
