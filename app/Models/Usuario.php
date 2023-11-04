@@ -18,7 +18,7 @@ class Usuario extends Authenticatable implements JWTSubject
     // use HasApiTokens;
     protected $table = 'usuario'; // Nombre de la tabla en la base de datos
     protected $primaryKey = 'id'; // Clave primaria
-    public $timestamps = false; // Si no tienes las columnas created_at y updated_at
+    public $timestamps = True; // Si no tienes las columnas created_at y updated_at
 
     protected $username = 'nombre_usuario';
 
@@ -39,6 +39,8 @@ class Usuario extends Authenticatable implements JWTSubject
         'contrasena',
         'correo_electronico',
         'rol',
+        'created_at',
+        'updated_at',
     ];
 
     public function getJWTIdentifier()
