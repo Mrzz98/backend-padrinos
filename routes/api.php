@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EstadoEventoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +25,19 @@ Route::middleware(['api'])->group(function() {
     Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/register', [AuthController::class, 'register'])->name('register');
     Route::get('/getaccount', [AuthController::class, 'getaccount']);
+    
 });
+// Obtener todos los estados de eventos
+Route::get('/estadoEvento', [EstadoEventoController::class, 'index']);
+// Crear un nuevo estado de evento
+Route::post('/estadoEvento', [EstadoEventoController::class, 'store']);
+// Mostrar un estado de evento específico
+Route::get('/estadoEvento/{estado}', [EstadoEventoController::class, 'show']);
+// Actualizar un estado de evento específico
+Route::put('/estadoEvento/{estado}', [EstadoEventoController::class, 'update']);
+// Eliminar un estado de evento específico
+Route::delete('/estadoEvento/{estado}', [EstadoEventoController::class, 'destroy']);
+
 
 Route::get('/usuarios', [UserController::class, 'index']);
 // Route::post('/login', [AuthController::class, 'login']);
