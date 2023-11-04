@@ -1,0 +1,396 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de Ejemplo",
+        "description": "Descripción de la API de Ejemplo",
+        "termsOfService": "https://www.ejemplo.com/terms",
+        "contact": {
+            "email": "contacto@ejemplo.com"
+        },
+        "license": {
+            "name": "Licencia de Ejemplo",
+            "url": "https://www.ejemplo.com/licencia"
+        },
+        "version": "1.0"
+    },
+    "paths": {
+        "/login": {
+            "post": {
+                "tags": [
+                    "Autenticación"
+                ],
+                "summary": "Iniciar sesión",
+                "description": "Iniciar sesión en la aplicación.",
+                "operationId": "login",
+                "requestBody": {
+                    "description": "Credenciales de inicio de sesión",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nombre_usuario",
+                                    "contrasena"
+                                ],
+                                "properties": {
+                                    "nombre_usuario": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "usuarioejemplo"
+                                    },
+                                    "contrasena": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "contrasenaejemplo"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Inicio de sesión exitoso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "string",
+                                            "format": "string"
+                                        },
+                                        "token_type": {
+                                            "type": "string",
+                                            "format": "string"
+                                        },
+                                        "expires_in": {
+                                            "type": "integer",
+                                            "format": "int"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Credenciales incorrectas"
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "nombre_usuario": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "contrasena": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/register": {
+            "post": {
+                "tags": [
+                    "Registro"
+                ],
+                "summary": "Registrarse",
+                "description": "Registrar una nueva cuenta de usuario.",
+                "operationId": "register",
+                "requestBody": {
+                    "description": "Datos de registro de usuario",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nombre",
+                                    "nombre_usuario",
+                                    "contrasena",
+                                    "contrasena_confirmation",
+                                    "apellido",
+                                    "correo_electronico",
+                                    "rol"
+                                ],
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Nombre"
+                                    },
+                                    "nombre_usuario": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "usuarioejemplo"
+                                    },
+                                    "contrasena": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "contrasenaejemplo"
+                                    },
+                                    "contrasena_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "contrasenaejemplo"
+                                    },
+                                    "apellido": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Apellido"
+                                    },
+                                    "correo_electronico": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "usuario@ejemplo.com"
+                                    },
+                                    "rol": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Rol"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuario registrado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "format": "string"
+                                        },
+                                        "usuario": {
+                                            "$ref": "#/components/schemas/usuario"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "format": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error en el registro"
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "nombre": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "nombre_usuario": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "contrasena": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "apellido": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "correo_electronico": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "rol": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/getaccount": {
+            "get": {
+                "tags": [
+                    "usuario"
+                ],
+                "summary": "Obtener información del usuario autenticado",
+                "description": "Obtiene información del usuario que ha iniciado sesión.",
+                "operationId": "getaccount",
+                "responses": {
+                    "200": {
+                        "description": "Información del usuario",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/usuario"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/logout": {
+            "post": {
+                "tags": [
+                    "Autenticación"
+                ],
+                "summary": "Cerrar sesión",
+                "description": "Cerrar sesión del usuario autenticado.",
+                "operationId": "logout",
+                "responses": {
+                    "200": {
+                        "description": "Sesión cerrada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "format": "string",
+                                            "example": "Sesión cerrada exitosamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/usuarios": {
+            "get": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Obtener todos los usuarios",
+                "description": "Obtiene la lista de todos los usuarios en la base de datos",
+                "operationId": "index",
+                "responses": {
+                    "200": {
+                        "description": "Lista de usuarios",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/usuario"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        },
+        "/generarPdf": {
+            "get": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Generar PDF de usuarios",
+                "description": "Genera un archivo PDF que contiene la lista de usuarios",
+                "operationId": "generarPDF",
+                "responses": {
+                    "200": {
+                        "description": "PDF generado exitosamente"
+                    }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "usuario": {
+                "title": "usuario",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "apellido": {
+                        "type": "string"
+                    },
+                    "nombre_usuario": {
+                        "type": "string"
+                    },
+                    "contrasena": {
+                        "type": "string"
+                    },
+                    "correo_electronico": {
+                        "type": "string"
+                    },
+                    "rol": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    }
+}

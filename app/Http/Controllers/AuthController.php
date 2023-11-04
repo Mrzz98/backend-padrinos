@@ -2,6 +2,23 @@
 
 namespace App\Http\Controllers;
 
+
+/**
+ * @OA\Info(
+ *     title="API de Ejemplo",
+ *     version="1.0",
+ *     description="Descripción de la API de Ejemplo",
+ *     termsOfService="https://www.ejemplo.com/terms",
+ *     @OA\Contact(
+ *         email="contacto@ejemplo.com"
+ *     ),
+ *     @OA\License(
+ *         name="Licencia de Ejemplo",
+ *         url="https://www.ejemplo.com/licencia"
+ *     )
+ * )
+ */
+
 use Illuminate\Support\Str;
 use App\Models\Usuario;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +36,20 @@ use Tymon\JWTAuth\Facades\JWTAuth as FacadesJWTAuth;
 
 class AuthController extends Controller
 {
+    /**
+ * @OA\Schema(
+ *     schema="usuario",
+ *     title="usuario",
+ *     @OA\Property(property="id", type="integer"),
+ *     @OA\Property(property="apellido", type="string"),
+ *     @OA\Property(property="nombre_usuario", type="string"),
+ *     @OA\Property(property="contrasena", type="string"),
+ *     @OA\Property(property="correo_electronico", type="string"),
+ *     @OA\Property(property="rol", type="string"),
+ * )
+ * * )
+ */
+
     // public function login(Request $request)
     // {
     //     $jsonData = $request->json()->all();
@@ -65,6 +96,45 @@ class AuthController extends Controller
         $this->middleware('auth:api', ['except' => ['login', 'register']]); //login, register methods won't go through the api guard
     }
 
+    /**
+     * @OA\Post(
+     *     path="/login",
+     *     tags={"Autenticación"},
+     *     summary="Iniciar sesión",
+     *     description="Iniciar sesión en la aplicación.",
+     *     operationId="login",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Credenciales de inicio de sesión",
+     *         @OA\JsonContent(
+     *             required={"nombre_usuario", "contrasena"},
+     *             @OA\Property(property="nombre_usuario", type="string", format="string", example="usuarioejemplo"),
+     *             @OA\Property(property="contrasena", type="string", format="password", example="contrasenaejemplo"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Inicio de sesión exitoso",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="access_token", type="string", format="string"),
+     *             @OA\Property(property="token_type", type="string", format="string"),
+     *             @OA\Property(property="expires_in", type="integer", format="int"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Credenciales incorrectas",
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validación fallida",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="nombre_usuario", type="array", @OA\Items(type="string")),
+     *             @OA\Property(property="contrasena", type="array", @OA\Items(type="string")),
+     *         )
+     *     )
+     * )
+     */
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -93,6 +163,54 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/register",
+     *     tags={"Registro"},
+     *     summary="Registrarse",
+     *     description="Registrar una nueva cuenta de usuario.",
+     *     operationId="register",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Datos de registro de usuario",
+     *         @OA\JsonContent(
+     *             required={"nombre", "nombre_usuario", "contrasena", "contrasena_confirmation", "apellido", "correo_electronico", "rol"},
+     *             @OA\Property(property="nombre", type="string", format="string", example="Nombre"),
+     *             @OA\Property(property="nombre_usuario", type="string", format="string", example="usuarioejemplo"),
+     *             @OA\Property(property="contrasena", type="string", format="password", example="contrasenaejemplo"),
+     *             @OA\Property(property="contrasena_confirmation", type="string", format="password", example="contrasenaejemplo"),
+     *             @OA\Property(property="apellido", type="string", format="string", example="Apellido"),
+     *             @OA\Property(property="correo_electronico", type="string", format="email", example="usuario@ejemplo.com"),
+     *             @OA\Property(property="rol", type="string", format="string", example="Rol"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Usuario registrado exitosamente",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", format="string"),
+     *             @OA\Property(property="usuario", type="object", ref="#/components/schemas/usuario"),
+     *             @OA\Property(property="token", type="string", format="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Error en el registro",
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validación fallida",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="nombre", type="array", @OA\Items(type="string")),
+     *             @OA\Property(property="nombre_usuario", type="array", @OA\Items(type="string")),
+     *             @OA\Property(property="contrasena", type="array", @OA\Items(type="string")),
+     *             @OA\Property(property="apellido", type="array", @OA\Items(type="string")),
+     *             @OA\Property(property="correo_electronico", type="array", @OA\Items(type="string")),
+     *             @OA\Property(property="rol", type="array", @OA\Items(type="string")),
+     *         )
+     *     )
+     * )
+     */
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -126,6 +244,28 @@ class AuthController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/getaccount",
+     *     tags={"usuario"},
+     *     summary="Obtener información del usuario autenticado",
+     *     description="Obtiene información del usuario que ha iniciado sesión.",
+     *     operationId="getaccount",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Información del usuario",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             ref="#/components/schemas/usuario"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="No autorizado",
+     *     )
+     * )
+     */
     public function getaccount()
     {
         $jwtAuth = app('JWTAuth');
@@ -143,6 +283,28 @@ class AuthController extends Controller
         return response()->json(compact('user'));
     }
 
+
+    /**
+     * @OA\Post(
+     *     path="/logout",
+     *     tags={"Autenticación"},
+     *     summary="Cerrar sesión",
+     *     description="Cerrar sesión del usuario autenticado.",
+     *     operationId="logout",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Sesión cerrada exitosamente",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", format="string", example="Sesión cerrada exitosamente"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="No autorizado",
+     *     )
+     * )
+     */
     public function logout()
     {
         auth()->logout();
