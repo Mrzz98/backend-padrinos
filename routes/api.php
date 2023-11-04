@@ -25,6 +25,7 @@ Route::middleware(['api'])->group(function() {
     Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/register', [AuthController::class, 'register'])->name('register');
     Route::get('/getaccount', [AuthController::class, 'getaccount']);
+    Route::post('/logout', [AuthController::class, 'logout']);
     
 });
 // Obtener todos los estados de eventos
@@ -40,7 +41,7 @@ Route::delete('/estadoEvento/{estado}', [EstadoEventoController::class, 'destroy
 
 Route::get('/generarPdf', [UserController::class, 'generarPDF']);
 
-
+Route::post('/logout', [AuthController::class, 'logout']);
 Route::get('/usuarios', [UserController::class, 'index']);
 // Route::post('/login', [AuthController::class, 'login']);
 
