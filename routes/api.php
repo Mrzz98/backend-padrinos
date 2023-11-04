@@ -38,6 +38,8 @@ Route::put('/estadoEvento/{estado}', [EstadoEventoController::class, 'update']);
 // Eliminar un estado de evento específico
 Route::delete('/estadoEvento/{estado}', [EstadoEventoController::class, 'destroy']);
 
+Route::get('/generarPdf', [UserController::class, 'generarPDF']);
+
 
 Route::get('/usuarios', [UserController::class, 'index']);
 // Route::post('/login', [AuthController::class, 'login']);
