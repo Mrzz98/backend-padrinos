@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class EstadoEvento extends Model
 {
     use HasFactory;
+    public $timestamps = True; // Si no tienes las columnas created_at y updated_at
+    protected $fillable = [
+        'nombre',
+    ];
 }
