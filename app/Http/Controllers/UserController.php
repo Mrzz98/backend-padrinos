@@ -17,11 +17,12 @@ class UserController extends Controller
 
     public function generarPDF()
     {
+        $PDF = app('PDF');
         $users = Usuario::all(); // Obtén la lista de usuarios desde tu modelo User
 
         $data = ['users' => $users]; // Datos que deseas pasar a la vista
     
-        $pdf = PDF::loadView('reporte', $data);
+        $pdf = $PDF::loadView('reporte', $data);
     
         return $pdf->stream('reporte.pdf');
     }
