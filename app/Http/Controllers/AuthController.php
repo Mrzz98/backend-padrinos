@@ -114,7 +114,7 @@ class AuthController extends Controller
             'contrasena' => Hash::make($request->get('contrasena')),
             'apellido' => $request->get('apellido'),
             'correo_electronico' => $request->get('correo_electronico'),
-            'rol' => $request->get('rol')
+            'rol' => $request->get('rol'),
         ]);
 
         $token = FacadesJWTAuth::fromUser($user);
