@@ -151,8 +151,13 @@ class AuthController extends Controller
 
         $usuario = Usuario::where('nombre_usuario', $data['nombre_usuario'])->first();
 
+
         if (!$usuario) {
             return response()->json(['error' => 'Credenciales incorrecstas'], 401);
+        }else{
+            return response()->json(['a' => $usuario->contrasena, 
+            'b' => $data['contrasena']
+        ], 200);
         }
 
         // Compara la contraseña encriptada enviada por el cliente con la contraseña encriptada almacenada en la base de datos
