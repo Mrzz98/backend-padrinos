@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * @OA\Info(
+ *     title="Deni de Ejemplo",
+ *     version="1.0",
+ *     description="Descripción de la API de Ejemplo",
+ *     termsOfService="https://www.ejemplo.com/terms",
+ *     @OA\Contact(
+ *         email="contacto@ejemplo.com"
+ *     ),
+ *     @OA\License(
+ *         name="Licencia de Ejemplo",
+ *         url="https://www.ejemplo.com/licencia"
+ *     )
+ * )
+ */
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -43,6 +59,3 @@ Route::get('/generarPdf', [UserController::class, 'generarPDF']);
 
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::get('/usuarios', [UserController::class, 'index']);
-// Route::post('/login', [AuthController::class, 'login']);
-
-// Route::post('/logout', 'AuthController@logout');

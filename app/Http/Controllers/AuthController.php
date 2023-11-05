@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 
 /**
  * @OA\Info(
- *     title="API de Ejemplo",
+ *     title="Deni",
  *     version="1.0",
  *     description="Descripción de la API de Ejemplo",
  *     termsOfService="https://www.ejemplo.com/terms",
@@ -37,18 +37,18 @@ use Tymon\JWTAuth\Facades\JWTAuth as FacadesJWTAuth;
 class AuthController extends Controller
 {
     /**
- * @OA\Schema(
- *     schema="usuario",
- *     title="usuario",
- *     @OA\Property(property="id", type="integer"),
- *     @OA\Property(property="apellido", type="string"),
- *     @OA\Property(property="nombre_usuario", type="string"),
- *     @OA\Property(property="contrasena", type="string"),
- *     @OA\Property(property="correo_electronico", type="string"),
- *     @OA\Property(property="rol", type="string"),
- * )
- * * )
- */
+     * @OA\Schema(
+     *     schema="usuario",
+     *     title="usuario",
+     *     @OA\Property(property="id", type="integer"),
+     *     @OA\Property(property="apellido", type="string"),
+     *     @OA\Property(property="nombre_usuario", type="string"),
+     *     @OA\Property(property="contrasena", type="string"),
+     *     @OA\Property(property="correo_electronico", type="string"),
+     *     @OA\Property(property="rol", type="string"),
+     * )
+     * * )
+     */
 
     // public function login(Request $request)
     // {
@@ -135,6 +135,34 @@ class AuthController extends Controller
      *     )
      * )
      */
+    // public function login(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'nombre_usuario' => 'required',
+    //         'contrasena' => 'required',
+    //     ]);
+
+
+    //     if ($validator->fails()) {
+    //         return response()->json($validator->errors(), 422);
+    //     }
+    //     $data = $validator->validated();
+    //     if (isset($data['contrasena'])) {
+    //         $data['password'] = $data['contrasena']; // Cambia el nombre del atributo
+    //         unset($data['contrasena']); // Elimina el atributo anterior si es necesario
+    //     }
+
+    //     $jwtCredentials = $data;
+
+    //     $jwtAuth = app('JWTAuth');
+    //     if (!$token = $jwtAuth::attempt($jwtCredentials)) {
+    //         return response()->json(['error' => 'Credenciales incorrectas'], 401);
+    //     }
+
+    //     // return response()->json(compact('token'));
+    //     return $this->respondWithToken($token);
+    // }
+
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -142,25 +170,35 @@ class AuthController extends Controller
             'contrasena' => 'required',
         ]);
 
-
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
+
         $data = $validator->validated();
-        if (isset($data['contrasena'])) {
-            $data['password'] = $data['contrasena']; // Cambia el nombre del atributo
-            unset($data['contrasena']); // Elimina el atributo anterior si es necesario
-        }
 
-        $jwtCredentials = $data;
+        $usuario = Usuario::where('nombre_usuario', $data['nombre_usuario'])->first();
 
-        $jwtAuth = app('JWTAuth');
-        if (!$token = $jwtAuth::attempt($jwtCredentials)) {
+        if (!$usuario) {
             return response()->json(['error' => 'Credenciales incorrectas'], 401);
         }
 
-        // return response()->json(compact('token'));
-        return $this->respondWithToken($token);
+        // Compara la contraseña encriptada enviada por el cliente con la contraseña encriptada almacenada en la base de datos
+        if (Hash::check($data['contrasena'], $usuario->contrasena)) {
+            // Las contraseñas coinciden
+            $jwtAuth = app('JWTAuth');
+            $jwtCredentials = [
+                'nombre_usuario' => $data['nombre_usuario'],
+                'password' => $data['contrasena'], // La contraseña ya está encriptada
+            ];
+
+            if (!$token = $jwtAuth::attempt($jwtCredentials)) {
+                return response()->json(['error' => 'Credenciales incorrectas'], 401);
+            }
+
+            return $this->respondWithToken($token);
+        } else {
+            return response()->json(['error' => 'Credenciales incorrectas'], 401);
+        }
     }
 
     /**
