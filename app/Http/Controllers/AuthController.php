@@ -157,12 +157,13 @@ class AuthController extends Controller
         }
 
         // Compara la contraseña encriptada enviada por el cliente con la contraseña encriptada almacenada en la base de datos
-        if (password_verify($data['contrasena'], $usuario->contrasena)) {
+        if ($data['contrasena'] === $usuario->contrasena) {
             // Las contraseñas coinciden
             $jwtAuth = app('JWTAuth');
+            $contrasenaDesencriptada = decrypt($data['contrasena']);
             $jwtCredentials = [
                 'nombre_usuario' => $data['nombre_usuario'],
-                'password' => decrypt($data['contrasena']), // La contraseña ya está encriptada
+                'password' => $contrasenaDesencriptada, // La contraseña ya está encriptada
             ];
 
             if (!$token = $jwtAuth::attempt($jwtCredentials)) {
