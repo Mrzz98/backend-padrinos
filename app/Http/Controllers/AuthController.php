@@ -162,7 +162,7 @@ class AuthController extends Controller
             $jwtAuth = app('JWTAuth');
             $jwtCredentials = [
                 'nombre_usuario' => $data['nombre_usuario'],
-                'password' => $data['contrasena'], // La contraseña ya está encriptada
+                'password' => decrypt($data['contrasena']), // La contraseña ya está encriptada
             ];
 
             if (!$token = $jwtAuth::attempt($jwtCredentials)) {
