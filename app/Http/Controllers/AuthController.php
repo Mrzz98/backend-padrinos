@@ -157,19 +157,18 @@ class AuthController extends Controller
         }
 
         // Compara la contraseña encriptada enviada por el cliente con la contraseña encriptada almacenada en la base de datos
-        if ($data['contrasena'] === $usuario->contrasena) {
+        if (password_verify($data['contrasena'], $usuario->contrasena)) {
             // Las contraseñas coinciden
             $jwtAuth = app('JWTAuth');
-            $contrasenaDesencriptada = decrypt($data['contrasena']);
             $jwtCredentials = [
                 'nombre_usuario' => $data['nombre_usuario'],
-                'password' => $contrasenaDesencriptada, // La contraseña ya está encriptada
+                'password' => $data['contrasena'], // La contraseña ya está encriptada
             ];
-
+        
             if (!$token = $jwtAuth::attempt($jwtCredentials)) {
-                return response()->json(['error' => 'Credenciales incorreactas'], 401);
+                return response()->json(['error' => 'Credenciales incorrectas'], 401);
             }
-
+        
             return $this->respondWithToken($token);
         } else {
             return response()->json(['error' => 'Credenciales incorrectas'], 401);
