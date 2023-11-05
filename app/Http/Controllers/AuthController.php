@@ -135,33 +135,6 @@ class AuthController extends Controller
      *     )
      * )
      */
-    // public function login(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'nombre_usuario' => 'required',
-    //         'contrasena' => 'required',
-    //     ]);
-
-
-    //     if ($validator->fails()) {
-    //         return response()->json($validator->errors(), 422);
-    //     }
-    //     $data = $validator->validated();
-    //     if (isset($data['contrasena'])) {
-    //         $data['password'] = $data['contrasena']; // Cambia el nombre del atributo
-    //         unset($data['contrasena']); // Elimina el atributo anterior si es necesario
-    //     }
-
-    //     $jwtCredentials = $data;
-
-    //     $jwtAuth = app('JWTAuth');
-    //     if (!$token = $jwtAuth::attempt($jwtCredentials)) {
-    //         return response()->json(['error' => 'Credenciales incorrectas'], 401);
-    //     }
-
-    //     // return response()->json(compact('token'));
-    //     return $this->respondWithToken($token);
-    // }
 
     public function login(Request $request)
     {
@@ -183,7 +156,7 @@ class AuthController extends Controller
         }
 
         // Compara la contraseña encriptada enviada por el cliente con la contraseña encriptada almacenada en la base de datos
-        if (Hash::check($data['contrasena'], $usuario->contrasena)) {
+        if ($data['contrasena'] === $usuario->contrasena) {
             // Las contraseñas coinciden
             $jwtAuth = app('JWTAuth');
             $jwtCredentials = [
