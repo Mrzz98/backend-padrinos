@@ -16,10 +16,12 @@
  * )
  */
 
+use App\Http\Controllers\AnimalController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AnimalesController;
 use App\Http\Controllers\EstadoEventoController;
 
 /*
@@ -44,6 +46,11 @@ Route::middleware(['api'])->group(function() {
     Route::post('/logout', [AuthController::class, 'logout']);
     
 });
+Route::get('/animales', [AnimalesController::class, 'index']);
+Route::post('/animales', [AnimalesController::class, 'store']);
+Route::get('/animales/{id}', [AnimalesController::class, 'show']);
+Route::get('/animales/pdf', [AnimalesController::class, 'generarPDFAnimales']);
+
 // Obtener todos los estados de eventos
 Route::get('/estadoEvento', [EstadoEventoController::class, 'index']);
 // Crear un nuevo estado de evento
@@ -55,7 +62,7 @@ Route::put('/estadoEvento/{estado}', [EstadoEventoController::class, 'update']);
 // Eliminar un estado de evento específico
 Route::delete('/estadoEvento/{estado}', [EstadoEventoController::class, 'destroy']);
 
-Route::get('/generarPdf', [UserController::class, 'generarPDF']);
+Route::get('/usuarios/pdf', [UserController::class, 'generarPDF']);
 
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::get('/usuarios', [UserController::class, 'index']);
