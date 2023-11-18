@@ -49,7 +49,7 @@ Route::middleware(['api'])->group(function() {
 Route::get('/animales', [AnimalesController::class, 'index']);
 Route::post('/animales', [AnimalesController::class, 'store']);
 Route::get('/animales/{id}', [AnimalesController::class, 'show']);
-Route::get('/animales/pdf', [AnimalesController::class, 'generarPDFAnimales']);
+Route::get('/animales/report/pdf', [AnimalesController::class, 'generarPDFAnimales']);
 
 // Obtener todos los estados de eventos
 Route::get('/estadoEvento', [EstadoEventoController::class, 'index']);
@@ -62,7 +62,7 @@ Route::put('/estadoEvento/{estado}', [EstadoEventoController::class, 'update']);
 // Eliminar un estado de evento específico
 Route::delete('/estadoEvento/{estado}', [EstadoEventoController::class, 'destroy']);
 
-Route::get('/usuarios/pdf', [UserController::class, 'generarPDF']);
+Route::get('/usuarios/report/pdf', [UserController::class, 'generarPDF']);
 
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::get('/usuarios', [UserController::class, 'index']);
