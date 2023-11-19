@@ -6,16 +6,28 @@ use App\Models\Animal;
 use App\Models\Rescate;
 use Illuminate\Http\Request;
 
+/**
+ * @OA\Schema(
+ *     schema="rescate",
+ *     title="rescate",
+ *     @OA\Property(property="id", type="integer"),
+ *     @OA\Property(property="id_usuario", type="integer"),
+ *     @OA\Property(property="direccion", type="string"),
+ *     @OA\Property(property="estado", type="string"),
+ *     @OA\Property(property="fecha_rescate", type="string", format="date"),
+ *     @OA\Property(property="informacion_adicional", type="string"),
+ *     @OA\Property(property="id_animal", type="integer"),
+ * )
+ */
 class RescateController extends Controller
 {
-    //
     /**
      * @OA\Get(
      *     path="/rescates",
-     *     summary="Obtener todos los rescates",
-     *     description="Obtiene la lista de todos los rescates en la base de datos",
-     *     operationId="index",
      *     tags={"Rescates"},
+     *     summary="Obtener todos los rescates",
+     *     description="Recupera todos los rescates de la base de datos.",
+     *     operationId="indexRescates",
      *     @OA\Response(
      *         response=200,
      *         description="Lista de rescates",
@@ -23,10 +35,7 @@ class RescateController extends Controller
      *             type="array",
      *             @OA\Items(ref="#/components/schemas/rescate")
      *         )
-     *     ),
-     *     security={
-     *         {"api_key": {}}
-     *     }
+     *     )
      * )
      */
     public function index()
@@ -38,22 +47,40 @@ class RescateController extends Controller
     /**
      * @OA\Post(
      *     path="/rescates",
-     *     summary="Crear un nuevo rescate",
-     *     description="Crea un nuevo rescate en la base de datos",
-     *     operationId="crearRescate",
      *     tags={"Rescates"},
+     *     summary="Registrar un nuevo rescate",
+     *     description="Crear un nuevo rescate con la información proporcionada.",
+     *     operationId="storeResc",
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/rescate")
+     *         description="Datos del rescate",
+     *         @OA\JsonContent(
+     *             required={"id_usuario", "direccion", "estado", "fecha_rescate", "id_animal"},
+     *             @OA\Property(property="id_usuario", type="integer", format="int", example=1),
+     *             @OA\Property(property="direccion", type="string", format="string", example="Dirección del rescate"),
+     *             @OA\Property(property="estado", type="string", format="string", example="En curso"),
+     *             @OA\Property(property="fecha_rescate", type="string", format="date", example="2023-11-19"),
+     *             @OA\Property(property="informacion_adicional", type="string", format="string"),
+     *             @OA\Property(property="id_animal", type="integer", format="int", example=1),
+     *         )
      *     ),
      *     @OA\Response(
      *         response=201,
-     *         description="Rescate creado exitosamente",
-     *         @OA\JsonContent(ref="#/components/schemas/rescate")
+     *         description="Rescate registrado exitosamente",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             ref="#/components/schemas/rescate"
+     *         )
      *     ),
-     *     security={
-     *         {"api_key": {}}
-     *     }
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validación fallida",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Error de validación"),
+     *             @OA\Property(property="errors", type="object"),
+     *         )
+     *     )
      * )
      */
     public function store(Request $request)
@@ -75,22 +102,46 @@ class RescateController extends Controller
     /**
      * @OA\Post(
      *     path="/rescates/store2",
-     *     summary="Crear un nuevo rescate con creación de animal",
-     *     description="Crea un nuevo rescate en la base de datos y crea un nuevo animal si no existe",
-     *     operationId="crearRescateConAnimal",
      *     tags={"Rescates"},
+     *     summary="Registrar un nuevo rescate con información detallada del animal",
+     *     description="Crear un nuevo rescate con información detallada del animal proporcionada.",
+     *     operationId="store2resc",
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/rescateConAnimal")
+     *         description="Datos del rescate con información detallada del animal",
+     *         @OA\JsonContent(
+     *             required={"id_usuario", "direccion", "estado", "fecha_rescate", "id_animal"},
+     *             @OA\Property(property="id_usuario", type="integer", format="int", example=1),
+     *             @OA\Property(property="direccion", type="string", format="string", example="Dirección del rescate"),
+     *             @OA\Property(property="estado", type="string", format="string", example="En curso"),
+     *             @OA\Property(property="fecha_rescate", type="string", format="date", example="2023-11-19"),
+     *             @OA\Property(property="informacion_adicional", type="string", format="string"),
+     *             @OA\Property(property="id_animal", type="object", required={"nombre", "especie"}, 
+     *                 @OA\Property(property="nombre", type="string", format="string", example="Nombre del animal"),
+     *                 @OA\Property(property="especie", type="string", format="string", example="Especie del animal"),
+     *                 @OA\Property(property="raza", type="string", format="string", example="Raza del animal"),
+     *                 @OA\Property(property="edad", type="integer", format="int", example=3),
+     *                 @OA\Property(property="descripcion", type="string", format="string", example="Descripción del animal"),
+     *             ),
+     *         )
      *     ),
      *     @OA\Response(
      *         response=201,
-     *         description="Rescate creado exitosamente",
-     *         @OA\JsonContent(ref="#/components/schemas/rescate")
+     *         description="Rescate registrado exitosamente",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             ref="#/components/schemas/rescate"
+     *         )
      *     ),
-     *     security={
-     *         {"api_key": {}}
-     *     }
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validación fallida",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Error de validación"),
+     *             @OA\Property(property="errors", type="object"),
+     *         )
+     *     )
      * )
      */
     public function store2(Request $request)
@@ -123,29 +174,33 @@ class RescateController extends Controller
     /**
      * @OA\Get(
      *     path="/rescates/{id}",
-     *     summary="Obtener un rescate por ID",
-     *     description="Recupera un rescate específico por su ID",
-     *     operationId="obtenerRescatePorId",
      *     tags={"Rescates"},
+     *     summary="Obtener información de un rescate",
+     *     description="Obtiene información de un rescate por su ID.",
+     *     operationId="showResc",
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         description="ID del rescate a recuperar",
+     *         description="ID del rescate",
      *         required=true,
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Rescate recuperado exitosamente",
-     *         @OA\JsonContent(ref="#/components/schemas/rescate")
+     *         description="Información del rescate",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             ref="#/components/schemas/rescate"
+     *         )
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Rescate no encontrado"
-     *     ),
-     *     security={
-     *         {"api_key": {}}
-     *     }
+     *         description="Rescate no encontrado",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Rescate no encontrado"),
+     *         )
+     *     )
      * )
      */
     public function show($id)
@@ -163,33 +218,55 @@ class RescateController extends Controller
     /**
      * @OA\Put(
      *     path="/rescates/{id}",
-     *     summary="Actualizar un rescate por ID",
-     *     description="Actualiza un rescate específico por su ID",
-     *     operationId="actualizarRescatePorId",
      *     tags={"Rescates"},
+     *     summary="Actualizar un rescate",
+     *     description="Actualizar la información de un rescate por su ID.",
+     *     operationId="update",
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         description="ID del rescate a actualizar",
+     *         description="ID del rescate",
      *         required=true,
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/rescate")
+     *         description="Datos actualizados del rescate",
+     *         @OA\JsonContent(
+     *             required={"id_usuario", "direccion", "estado", "fecha_rescate", "id_animal"},
+     *             @OA\Property(property="id_usuario", type="integer", format="int", example=1),
+     *             @OA\Property(property="direccion", type="string", format="string", example="Nueva dirección del rescate"),
+     *             @OA\Property(property="estado", type="string", format="string", example="Completado"),
+     *             @OA\Property(property="fecha_rescate", type="string", format="date", example="2023-11-20"),
+     *             @OA\Property(property="informacion_adicional", type="string", format="string", example="Nueva información adicional"),
+     *             @OA\Property(property="id_animal", type="integer", format="int", example=2),
+     *         )
      *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Rescate actualizado exitosamente",
-     *         @OA\JsonContent(ref="#/components/schemas/rescate")
+     *         @OA\JsonContent(
+     *             type="object",
+     *             ref="#/components/schemas/rescate"
+     *         )
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Rescate no encontrado"
+     *         description="Rescate no encontrado",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Rescate no encontrado"),
+     *         )
      *     ),
-     *     security={
-     *         {"api_key": {}}
-     *     }
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validación fallida",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Error de validación"),
+     *             @OA\Property(property="errors", type="object"),
+     *         )
+     *     )
      * )
      */
     public function update(Request $request, $id)

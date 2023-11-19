@@ -4,15 +4,29 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Adoptante;
+
+/**
+ * @OA\Schema(
+ *     schema="adoptante",
+ *     title="adoptante",
+ *     @OA\Property(property="id", type="integer"),
+ *     @OA\Property(property="nombre", type="string"),
+ *     @OA\Property(property="apellido", type="string"),
+ *     @OA\Property(property="correo_electronico", type="string"),
+ *     @OA\Property(property="telefono", type="string"),
+ *     @OA\Property(property="direccion", type="string"),
+ *     @OA\Property(property="ocupacion", type="string"),
+ * )
+ */
 class AdoptanteController extends Controller
 {
     /**
      * @OA\Get(
      *     path="/adoptantes",
-     *     summary="Obtener todos los adoptantes",
-     *     description="Obtiene la lista de todos los adoptantes en la base de datos",
-     *     operationId="index",
      *     tags={"Adoptantes"},
+     *     summary="Obtener todos los adoptantes",
+     *     description="Recupera todos los adoptantes de la base de datos.",
+     *     operationId="getAll",
      *     @OA\Response(
      *         response=200,
      *         description="Lista de adoptantes",
@@ -20,13 +34,10 @@ class AdoptanteController extends Controller
      *             type="array",
      *             @OA\Items(ref="#/components/schemas/adoptante")
      *         )
-     *     ),
-     *     security={
-     *         {"api_key": {}}
-     *     }
+     *     )
      * )
      */
-    public function index()
+    public function getAll()
     {
         $adoptantes = Adoptante::all(); // Recupera todos los adoptantes de la base de datos
 
@@ -36,22 +47,40 @@ class AdoptanteController extends Controller
     /**
      * @OA\Post(
      *     path="/adoptantes",
-     *     summary="Crear un nuevo adoptante",
-     *     description="Crea un nuevo adoptante en la base de datos",
-     *     operationId="crearAdoptante",
      *     tags={"Adoptantes"},
+     *     summary="Registrar un nuevo adoptante",
+     *     description="Crear un nuevo adoptante con la información proporcionada.",
+     *     operationId="store",
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/adoptante")
+     *         description="Datos del adoptante",
+     *         @OA\JsonContent(
+     *             required={"nombre", "apellido", "correo_electronico", "telefono", "direccion"},
+     *             @OA\Property(property="nombre", type="string", format="string", example="Nombre"),
+     *             @OA\Property(property="apellido", type="string", format="string", example="Apellido"),
+     *             @OA\Property(property="correo_electronico", type="string", format="email", example="adoptante@ejemplo.com"),
+     *             @OA\Property(property="telefono", type="string", format="string", example="123456789"),
+     *             @OA\Property(property="direccion", type="string", format="string", example="Dirección de ejemplo"),
+     *             @OA\Property(property="ocupacion", type="string", format="string", example="Ocupación de ejemplo"),
+     *         )
      *     ),
      *     @OA\Response(
      *         response=201,
-     *         description="Adoptante creado exitosamente",
-     *         @OA\JsonContent(ref="#/components/schemas/adoptante")
+     *         description="Adoptante registrado exitosamente",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             ref="#/components/schemas/adoptante"
+     *         )
      *     ),
-     *     security={
-     *         {"api_key": {}}
-     *     }
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validación fallida",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Error de validación"),
+     *             @OA\Property(property="errors", type="object"),
+     *         )
+     *     )
      * )
      */
     public function store(Request $request)
@@ -75,29 +104,33 @@ class AdoptanteController extends Controller
     /**
      * @OA\Get(
      *     path="/adoptantes/{id}",
-     *     summary="Obtener un adoptante por ID",
-     *     description="Recupera un adoptante específico por su ID",
-     *     operationId="obtenerAdoptantePorId",
      *     tags={"Adoptantes"},
+     *     summary="Obtener información de un adoptante",
+     *     description="Obtiene información de un adoptante por su ID.",
+     *     operationId="show",
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         description="ID del adoptante a recuperar",
+     *         description="ID del adoptante",
      *         required=true,
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Adoptante recuperado exitosamente",
-     *         @OA\JsonContent(ref="#/components/schemas/adoptante")
+     *         description="Información del adoptante",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             ref="#/components/schemas/adoptante"
+     *         )
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Adoptante no encontrado"
-     *     ),
-     *     security={
-     *         {"api_key": {}}
-     *     }
+     *         description="Adoptante no encontrado",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Adoptante no encontrado"),
+     *         )
+     *     )
      * )
      */
     public function show($id)

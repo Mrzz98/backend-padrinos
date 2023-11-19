@@ -7,6 +7,17 @@ use Illuminate\Http\Request;
 
 class TipoEventoController extends Controller
 {
+    /**
+     * @OA\Schema(
+     *     schema="tipo_evento",
+     *     title="Tipo de Evento",
+     *     @OA\Property(property="id", type="integer"),
+     *     @OA\Property(property="descripcion", type="string"),
+     *     @OA\Property(property="created_at", type="string", format="date-time"),
+     *     @OA\Property(property="updated_at", type="string", format="date-time"),
+     * )
+     */
+
     public function index()
     {
         $tipos = TipoEvento::all();

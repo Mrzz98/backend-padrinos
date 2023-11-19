@@ -1,34 +1,32 @@
 <?php
 
 namespace App\Http\Controllers;
-/**
- * @OA\Info(
- *     title="Deni",
- *     version="1.0",
- *     description="Descripción de la API de Ejemplo",
- *     termsOfService="https://www.ejemplo.com/terms",
- *     @OA\Contact(
- *         email="contacto@ejemplo.com"
- *     ),
- *     @OA\License(
- *         name="Licencia de Ejemplo",
- *         url="https://www.ejemplo.com/licencia"
- *     )
- * )
- */
+
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\PDF;
 use App\Models\Animal;
 
+/**
+ * @OA\Schema(
+ *     schema="animal",
+ *     title="animal",
+ *     @OA\Property(property="id", type="integer"),
+ *     @OA\Property(property="nombre", type="string"),
+ *     @OA\Property(property="especie", type="string"),
+ *     @OA\Property(property="raza", type="string"),
+ *     @OA\Property(property="edad", type="integer"),
+ *     @OA\Property(property="descripcion", type="string"),
+ * )
+ */
 class AnimalesController extends Controller
 {
     /**
      * @OA\Get(
      *     path="/animales",
-     *     summary="Obtener todos los animales",
-     *     description="Obtiene la lista de todos los animales en la base de datos",
-     *     operationId="index",
      *     tags={"Animales"},
+     *     summary="Obtener todos los animales",
+     *     description="Recupera todos los animales de la base de datos.",
+     *     operationId="indexAnimales",
      *     @OA\Response(
      *         response=200,
      *         description="Lista de animales",
@@ -36,10 +34,7 @@ class AnimalesController extends Controller
      *             type="array",
      *             @OA\Items(ref="#/components/schemas/animal")
      *         )
-     *     ),
-     *     security={
-     *         {"api_key": {}}
-     *     }
+     *     )
      * )
      */
     public function index()
@@ -52,22 +47,39 @@ class AnimalesController extends Controller
     /**
      * @OA\Post(
      *     path="/animales",
-     *     summary="Crear un nuevo animal",
-     *     description="Crea un nuevo animal en la base de datos",
-     *     operationId="crearAnimal",
      *     tags={"Animales"},
+     *     summary="Registrar un nuevo animal",
+     *     description="Crear un nuevo animal con la información proporcionada.",
+     *     operationId="storeAnimal",
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/animal")
+     *         description="Datos del animal",
+     *         @OA\JsonContent(
+     *             required={"nombre", "especie"},
+     *             @OA\Property(property="nombre", type="string", format="string", example="Nombre"),
+     *             @OA\Property(property="especie", type="string", format="string", example="Especie"),
+     *             @OA\Property(property="raza", type="string", format="string", example="Raza"),
+     *             @OA\Property(property="edad", type="integer", format="int", example=3),
+     *             @OA\Property(property="descripcion", type="string", format="string", example="Descripción del animal"),
+     *         )
      *     ),
      *     @OA\Response(
      *         response=201,
-     *         description="Animal creado exitosamente",
-     *         @OA\JsonContent(ref="#/components/schemas/animal")
+     *         description="Animal registrado exitosamente",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             ref="#/components/schemas/animal"
+     *         )
      *     ),
-     *     security={
-     *         {"api_key": {}}
-     *     }
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validación fallida",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Error de validación"),
+     *             @OA\Property(property="errors", type="object"),
+     *         )
+     *     )
      * )
      */
     public function store(Request $request)
@@ -96,29 +108,33 @@ class AnimalesController extends Controller
     /**
      * @OA\Get(
      *     path="/animales/{id}",
-     *     summary="Obtener un animal por ID",
-     *     description="Recupera un animal específico por su ID",
-     *     operationId="obtenerAnimalPorId",
      *     tags={"Animales"},
+     *     summary="Obtener información de un animal",
+     *     description="Obtiene información de un animal por su ID.",
+     *     operationId="showAnimal",
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         description="ID del animal a recuperar",
+     *         description="ID del animal",
      *         required=true,
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Animal recuperado exitosamente",
-     *         @OA\JsonContent(ref="#/components/schemas/animal")
+     *         description="Información del animal",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             ref="#/components/schemas/animal"
+     *         )
      *     ),
      *     @OA\Response(
      *         response=404,
-     *         description="Animal no encontrado"
-     *     ),
-     *     security={
-     *         {"api_key": {}}
-     *     }
+     *         description="Animal no encontrado",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Animal no encontrado"),
+     *         )
+     *     )
      * )
      */
     public function show($id)
@@ -136,18 +152,15 @@ class AnimalesController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/generarPdfAnimales",
-     *     summary="Generar PDF de animales",
-     *     description="Genera un archivo PDF que contiene la lista de animales",
-     *     operationId="generarPDFAnimales",
+     *     path="/generar-pdf-animales",
      *     tags={"Animales"},
+     *     summary="Generar PDF de animales",
+     *     description="Genera un archivo PDF que contiene la lista de todos los animales.",
+     *     operationId="generarPDFAnimales",
      *     @OA\Response(
      *         response=200,
-     *         description="PDF generado exitosamente"
-     *     ),
-     *     security={
-     *         {"api_key": {}}
-     *     }
+     *         description="PDF generado exitosamente",
+     *     )
      * )
      */
     public function generarPDFAnimales()
@@ -156,7 +169,7 @@ class AnimalesController extends Controller
         $animales = Animal::all(); // Obtén la lista de animales desde tu modelo Animal
 
         $data = ['animales' => $animales]; // Datos que deseas pasar a la vista
-    
+
         $pdf = $PDF::loadView('reporte_animales', $data); // Asegúrate de tener una vista llamada 'reporte_animales'
 
         return $pdf->stream('reporte_animales.pdf');

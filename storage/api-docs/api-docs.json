@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "API de Ejemplo",
+        "title": "Deni",
         "description": "Descripción de la API de Ejemplo",
         "termsOfService": "https://www.ejemplo.com/terms",
         "contact": {
@@ -14,6 +14,339 @@
         "version": "1.0"
     },
     "paths": {
+        "/adoptantes": {
+            "get": {
+                "tags": [
+                    "Adoptantes"
+                ],
+                "summary": "Obtener todos los adoptantes",
+                "description": "Recupera todos los adoptantes de la base de datos.",
+                "operationId": "getAll",
+                "responses": {
+                    "200": {
+                        "description": "Lista de adoptantes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/adoptante"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Adoptantes"
+                ],
+                "summary": "Registrar un nuevo adoptante",
+                "description": "Crear un nuevo adoptante con la información proporcionada.",
+                "operationId": "store",
+                "requestBody": {
+                    "description": "Datos del adoptante",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nombre",
+                                    "apellido",
+                                    "correo_electronico",
+                                    "telefono",
+                                    "direccion"
+                                ],
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Nombre"
+                                    },
+                                    "apellido": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Apellido"
+                                    },
+                                    "correo_electronico": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "adoptante@ejemplo.com"
+                                    },
+                                    "telefono": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "123456789"
+                                    },
+                                    "direccion": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Dirección de ejemplo"
+                                    },
+                                    "ocupacion": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Ocupación de ejemplo"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Adoptante registrado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/adoptante"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error de validación"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/adoptantes/{id}": {
+            "get": {
+                "tags": [
+                    "Adoptantes"
+                ],
+                "summary": "Obtener información de un adoptante",
+                "description": "Obtiene información de un adoptante por su ID.",
+                "operationId": "show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del adoptante",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Información del adoptante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/adoptante"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Adoptante no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Adoptante no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/animales": {
+            "get": {
+                "tags": [
+                    "Animales"
+                ],
+                "summary": "Obtener todos los animales",
+                "description": "Recupera todos los animales de la base de datos.",
+                "operationId": "indexAnimales",
+                "responses": {
+                    "200": {
+                        "description": "Lista de animales",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/animal"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Animales"
+                ],
+                "summary": "Registrar un nuevo animal",
+                "description": "Crear un nuevo animal con la información proporcionada.",
+                "operationId": "storeAnimal",
+                "requestBody": {
+                    "description": "Datos del animal",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nombre",
+                                    "especie"
+                                ],
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Nombre"
+                                    },
+                                    "especie": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Especie"
+                                    },
+                                    "raza": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Raza"
+                                    },
+                                    "edad": {
+                                        "type": "integer",
+                                        "format": "int",
+                                        "example": 3
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Descripción del animal"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Animal registrado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/animal"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error de validación"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/animales/{id}": {
+            "get": {
+                "tags": [
+                    "Animales"
+                ],
+                "summary": "Obtener información de un animal",
+                "description": "Obtiene información de un animal por su ID.",
+                "operationId": "showAnimal",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del animal",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Información del animal",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/animal"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Animal no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Animal no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/generar-pdf-animales": {
+            "get": {
+                "tags": [
+                    "Animales"
+                ],
+                "summary": "Generar PDF de animales",
+                "description": "Genera un archivo PDF que contiene la lista de todos los animales.",
+                "operationId": "generarPDFAnimales",
+                "responses": {
+                    "200": {
+                        "description": "PDF generado exitosamente"
+                    }
+                }
+            }
+        },
         "/login": {
             "post": {
                 "tags": [
@@ -314,6 +647,674 @@
                 ]
             }
         },
+        "/estados-evento": {
+            "get": {
+                "tags": [
+                    "Estados de Evento"
+                ],
+                "summary": "Obtener todos los estados de eventos",
+                "description": "Recupera todos los estados de eventos de la base de datos.",
+                "operationId": "indexEstEv",
+                "responses": {
+                    "200": {
+                        "description": "Lista de estados de eventos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/estado_evento"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Estados de Evento"
+                ],
+                "summary": "Registrar un nuevo estado de evento",
+                "description": "Crear un nuevo estado de evento con la información proporcionada.",
+                "operationId": "storeEstEv",
+                "requestBody": {
+                    "description": "Datos del estado de evento",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nombre"
+                                ],
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Nombre del Estado"
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Descripción del Estado"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Estado de evento registrado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/estado_evento"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error de validación"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/estados-evento/{estado}": {
+            "get": {
+                "tags": [
+                    "Estados de Evento"
+                ],
+                "summary": "Obtener información de un estado de evento",
+                "description": "Obtiene información de un estado de evento por su ID.",
+                "operationId": "showEstEv",
+                "parameters": [
+                    {
+                        "name": "estado",
+                        "in": "path",
+                        "description": "ID del estado de evento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Información del estado de evento",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/estado_evento"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Estado de evento no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Estado de evento no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Estados de Evento"
+                ],
+                "summary": "Actualizar un estado de evento",
+                "description": "Actualiza un estado de evento existente con la información proporcionada.",
+                "operationId": "updateEstEv",
+                "parameters": [
+                    {
+                        "name": "estado",
+                        "in": "path",
+                        "description": "ID del estado de evento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Datos actualizados del estado de evento",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nombre"
+                                ],
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Nuevo Nombre del Estado"
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Nueva Descripción del Estado"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Estado de evento actualizado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/estado_evento"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Estado de evento no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Estado de evento no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error de validación"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Estados de Evento"
+                ],
+                "summary": "Eliminar un estado de evento",
+                "description": "Elimina un estado de evento existente por su ID.",
+                "operationId": "destroyEstEv",
+                "parameters": [
+                    {
+                        "name": "estado",
+                        "in": "path",
+                        "description": "ID del estado de evento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Estado de evento eliminado exitosamente"
+                    },
+                    "404": {
+                        "description": "Estado de evento no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Estado de evento no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rescates": {
+            "get": {
+                "tags": [
+                    "Rescates"
+                ],
+                "summary": "Obtener todos los rescates",
+                "description": "Recupera todos los rescates de la base de datos.",
+                "operationId": "indexRescates",
+                "responses": {
+                    "200": {
+                        "description": "Lista de rescates",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/rescate"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Rescates"
+                ],
+                "summary": "Registrar un nuevo rescate",
+                "description": "Crear un nuevo rescate con la información proporcionada.",
+                "operationId": "storeResc",
+                "requestBody": {
+                    "description": "Datos del rescate",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_usuario",
+                                    "direccion",
+                                    "estado",
+                                    "fecha_rescate",
+                                    "id_animal"
+                                ],
+                                "properties": {
+                                    "id_usuario": {
+                                        "type": "integer",
+                                        "format": "int",
+                                        "example": 1
+                                    },
+                                    "direccion": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Dirección del rescate"
+                                    },
+                                    "estado": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "En curso"
+                                    },
+                                    "fecha_rescate": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-11-19"
+                                    },
+                                    "informacion_adicional": {
+                                        "type": "string",
+                                        "format": "string"
+                                    },
+                                    "id_animal": {
+                                        "type": "integer",
+                                        "format": "int",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Rescate registrado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/rescate"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error de validación"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rescates/store2": {
+            "post": {
+                "tags": [
+                    "Rescates"
+                ],
+                "summary": "Registrar un nuevo rescate con información detallada del animal",
+                "description": "Crear un nuevo rescate con información detallada del animal proporcionada.",
+                "operationId": "store2resc",
+                "requestBody": {
+                    "description": "Datos del rescate con información detallada del animal",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_usuario",
+                                    "direccion",
+                                    "estado",
+                                    "fecha_rescate",
+                                    "id_animal"
+                                ],
+                                "properties": {
+                                    "id_usuario": {
+                                        "type": "integer",
+                                        "format": "int",
+                                        "example": 1
+                                    },
+                                    "direccion": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Dirección del rescate"
+                                    },
+                                    "estado": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "En curso"
+                                    },
+                                    "fecha_rescate": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-11-19"
+                                    },
+                                    "informacion_adicional": {
+                                        "type": "string",
+                                        "format": "string"
+                                    },
+                                    "id_animal": {
+                                        "required": [
+                                            "nombre",
+                                            "especie"
+                                        ],
+                                        "properties": {
+                                            "nombre": {
+                                                "type": "string",
+                                                "format": "string",
+                                                "example": "Nombre del animal"
+                                            },
+                                            "especie": {
+                                                "type": "string",
+                                                "format": "string",
+                                                "example": "Especie del animal"
+                                            },
+                                            "raza": {
+                                                "type": "string",
+                                                "format": "string",
+                                                "example": "Raza del animal"
+                                            },
+                                            "edad": {
+                                                "type": "integer",
+                                                "format": "int",
+                                                "example": 3
+                                            },
+                                            "descripcion": {
+                                                "type": "string",
+                                                "format": "string",
+                                                "example": "Descripción del animal"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Rescate registrado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/rescate"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error de validación"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rescates/{id}": {
+            "get": {
+                "tags": [
+                    "Rescates"
+                ],
+                "summary": "Obtener información de un rescate",
+                "description": "Obtiene información de un rescate por su ID.",
+                "operationId": "showResc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del rescate",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Información del rescate",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/rescate"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Rescate no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Rescate no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Rescates"
+                ],
+                "summary": "Actualizar un rescate",
+                "description": "Actualizar la información de un rescate por su ID.",
+                "operationId": "update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del rescate",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Datos actualizados del rescate",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_usuario",
+                                    "direccion",
+                                    "estado",
+                                    "fecha_rescate",
+                                    "id_animal"
+                                ],
+                                "properties": {
+                                    "id_usuario": {
+                                        "type": "integer",
+                                        "format": "int",
+                                        "example": 1
+                                    },
+                                    "direccion": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Nueva dirección del rescate"
+                                    },
+                                    "estado": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Completado"
+                                    },
+                                    "fecha_rescate": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-11-20"
+                                    },
+                                    "informacion_adicional": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Nueva información adicional"
+                                    },
+                                    "id_animal": {
+                                        "type": "integer",
+                                        "format": "int",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Rescate actualizado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/rescate"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Rescate no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Rescate no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error de validación"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/usuarios": {
             "get": {
                 "tags": [
@@ -367,6 +1368,57 @@
     },
     "components": {
         "schemas": {
+            "adoptante": {
+                "title": "adoptante",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "nombre": {
+                        "type": "string"
+                    },
+                    "apellido": {
+                        "type": "string"
+                    },
+                    "correo_electronico": {
+                        "type": "string"
+                    },
+                    "telefono": {
+                        "type": "string"
+                    },
+                    "direccion": {
+                        "type": "string"
+                    },
+                    "ocupacion": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "animal": {
+                "title": "animal",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "nombre": {
+                        "type": "string"
+                    },
+                    "especie": {
+                        "type": "string"
+                    },
+                    "raza": {
+                        "type": "string"
+                    },
+                    "edad": {
+                        "type": "integer"
+                    },
+                    "descripcion": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "usuario": {
                 "title": "usuario",
                 "properties": {
@@ -387,6 +1439,117 @@
                     },
                     "rol": {
                         "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "estado_evento": {
+                "title": "estado_evento",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "nombre": {
+                        "type": "string"
+                    },
+                    "descripcion": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "evento_recaudacion": {
+                "title": "Evento de Recaudación",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "nombre_del_evento": {
+                        "type": "string"
+                    },
+                    "fecha": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "ubicacion": {
+                        "type": "string"
+                    },
+                    "descripcion": {
+                        "type": "string"
+                    },
+                    "id_estado": {
+                        "type": "integer"
+                    },
+                    "id_del_usuario": {
+                        "type": "integer"
+                    },
+                    "id_tipo_evento": {
+                        "type": "integer"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "estadoEvento": {
+                        "$ref": "#/components/schemas/estado_evento"
+                    },
+                    "usuario": {
+                        "$ref": "#/components/schemas/usuario"
+                    },
+                    "tipoEvento": {
+                        "$ref": "#/components/schemas/tipo_evento"
+                    }
+                },
+                "type": "object"
+            },
+            "rescate": {
+                "title": "rescate",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "id_usuario": {
+                        "type": "integer"
+                    },
+                    "direccion": {
+                        "type": "string"
+                    },
+                    "estado": {
+                        "type": "string"
+                    },
+                    "fecha_rescate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "informacion_adicional": {
+                        "type": "string"
+                    },
+                    "id_animal": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "tipo_evento": {
+                "title": "Tipo de Evento",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "descripcion": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
                     }
                 },
                 "type": "object"
