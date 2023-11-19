@@ -24,6 +24,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AnimalesController;
 use App\Http\Controllers\EstadoEventoController;
 use App\Http\Controllers\AdoptanteController;
+use App\Http\Controllers\RescateController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +57,12 @@ Route::get('/animales/report/pdf', [AnimalesController::class, 'generarPDFAnimal
 Route::get('/adoptantes', [AdoptanteController::class, 'index']);
 Route::post('/adoptantes', [AdoptanteController::class, 'store']);
 Route::get('/adoptantes/{id}', [AdoptanteController::class, 'show']);
+
+Route::get('/rescates', [RescateController::class, 'index']);
+Route::post('/rescates', [RescateController::class, 'store']);
+Route::post('/rescatesA', [RescateController::class, 'store2']);
+Route::put('/rescates', [RescateController::class, 'udpate']);
+Route::get('/rescates/{id}', [RescateController::class, 'show']);
 
 // Obtener todos los estados de eventos
 Route::get('/estadoEvento', [EstadoEventoController::class, 'index']);

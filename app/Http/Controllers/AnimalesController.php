@@ -1,7 +1,21 @@
 <?php
 
 namespace App\Http\Controllers;
-
+/**
+ * @OA\Info(
+ *     title="Deni",
+ *     version="1.0",
+ *     description="Descripción de la API de Ejemplo",
+ *     termsOfService="https://www.ejemplo.com/terms",
+ *     @OA\Contact(
+ *         email="contacto@ejemplo.com"
+ *     ),
+ *     @OA\License(
+ *         name="Licencia de Ejemplo",
+ *         url="https://www.ejemplo.com/licencia"
+ *     )
+ * )
+ */
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\PDF;
 use App\Models\Animal;
