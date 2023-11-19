@@ -47,12 +47,12 @@ Route::middleware(['api'])->group(function() {
     Route::post('/register', [AuthController::class, 'register'])->name('register');
     Route::get('/getaccount', [AuthController::class, 'getaccount']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/animales', [AnimalesController::class, 'index']);
+    Route::post('/animales', [AnimalesController::class, 'store']);
+    Route::get('/animales/{id}', [AnimalesController::class, 'show']);
+    Route::get('/animales/report/pdf', [AnimalesController::class, 'generarPDFAnimales']);
     
 });
-Route::get('/animales', [AnimalesController::class, 'index']);
-Route::post('/animales', [AnimalesController::class, 'store']);
-Route::get('/animales/{id}', [AnimalesController::class, 'show']);
-Route::get('/animales/report/pdf', [AnimalesController::class, 'generarPDFAnimales']);
 
 Route::get('/adoptantes', [AdoptanteController::class, 'index']);
 Route::post('/adoptantes', [AdoptanteController::class, 'store']);
