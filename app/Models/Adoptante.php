@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Adoptante extends Model
 {
     use HasFactory;
+    protected $table = 'adoptantes';
+    protected $primaryKey = 'id';
+    public $timestamps = true;
+
+    protected $fillable = [
+        'nombre',
+        'apellido',
+        'correo_electronico',
+        'telefono',
+        'direccion',
+        'ocupacion',
+    ];
+
 }
