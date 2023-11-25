@@ -918,6 +918,256 @@
                 }
             }
         },
+        "/movimientos-animales": {
+            "get": {
+                "tags": [
+                    "MovimientosAnimales"
+                ],
+                "summary": "Obtener todos los movimientos de animales",
+                "description": "Recupera todos los movimientos de animales de la base de datos.",
+                "operationId": "indexMovimientosAnimales",
+                "responses": {
+                    "200": {
+                        "description": "Lista de movimientos de animales",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/movimientosAnimales"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "MovimientosAnimales"
+                ],
+                "summary": "Registrar un nuevo movimiento de animal",
+                "description": "Crea un nuevo movimiento de animal con la información proporcionada.",
+                "operationId": "storeMovimientoAnimal",
+                "requestBody": {
+                    "description": "Datos del movimiento de animal",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_solicitud",
+                                    "id_rescate",
+                                    "id_usuario",
+                                    "fecha_movimiento"
+                                ],
+                                "properties": {
+                                    "id_solicitud": {
+                                        "type": "integer",
+                                        "format": "int",
+                                        "example": 1
+                                    },
+                                    "id_rescate": {
+                                        "type": "integer",
+                                        "format": "int",
+                                        "example": 2
+                                    },
+                                    "id_usuario": {
+                                        "type": "integer",
+                                        "format": "int",
+                                        "example": 3
+                                    },
+                                    "fecha_movimiento": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-01-01"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Movimiento de animal registrado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/movimientosAnimales"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error de validación"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/movimientos-animales/{id}": {
+            "put": {
+                "tags": [
+                    "MovimientosAnimales"
+                ],
+                "summary": "Actualizar un movimiento de animal",
+                "description": "Actualiza un movimiento de animal existente por su ID con la información proporcionada.",
+                "operationId": "updateMovimientoAnimal",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del movimiento de animal",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Datos actualizados del movimiento de animal",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_solicitud",
+                                    "id_rescate",
+                                    "id_usuario",
+                                    "fecha_movimiento"
+                                ],
+                                "properties": {
+                                    "id_solicitud": {
+                                        "type": "integer",
+                                        "format": "int",
+                                        "example": 1
+                                    },
+                                    "id_rescate": {
+                                        "type": "integer",
+                                        "format": "int",
+                                        "example": 2
+                                    },
+                                    "id_usuario": {
+                                        "type": "integer",
+                                        "format": "int",
+                                        "example": 3
+                                    },
+                                    "fecha_movimiento": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-01-01"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Movimiento de animal actualizado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/movimientosAnimales"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Movimiento de animal no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Movimiento de animal no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error de validación"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "MovimientosAnimales"
+                ],
+                "summary": "Eliminar un movimiento de animal",
+                "description": "Elimina un movimiento de animal existente por su ID.",
+                "operationId": "deleteMovimientoAnimal",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del movimiento de animal",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Movimiento de animal eliminado exitosamente"
+                    },
+                    "404": {
+                        "description": "Movimiento de animal no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Movimiento de animal no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/rescates": {
             "get": {
                 "tags": [
@@ -1315,6 +1565,266 @@
                 }
             }
         },
+        "/solicitudes": {
+            "get": {
+                "tags": [
+                    "Solicitudes"
+                ],
+                "summary": "Obtener todas las solicitudes de adopción",
+                "description": "Recupera todas las solicitudes de adopción de la base de datos.",
+                "operationId": "indexSolicitudes",
+                "responses": {
+                    "200": {
+                        "description": "Lista de solicitudes de adopción",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/solicitudDeAdopcion"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Solicitudes"
+                ],
+                "summary": "Registrar una nueva solicitud de adopción",
+                "description": "Crear una nueva solicitud de adopción con la información proporcionada.",
+                "operationId": "storeSolicitud",
+                "requestBody": {
+                    "description": "Datos de la solicitud de adopción",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_del_usuario",
+                                    "id_del_adoptante",
+                                    "id_del_animal",
+                                    "fecha_solicitud",
+                                    "estado"
+                                ],
+                                "properties": {
+                                    "id_del_usuario": {
+                                        "type": "integer",
+                                        "format": "int",
+                                        "example": 1
+                                    },
+                                    "id_del_adoptante": {
+                                        "type": "integer",
+                                        "format": "int",
+                                        "example": 2
+                                    },
+                                    "id_del_animal": {
+                                        "type": "integer",
+                                        "format": "int",
+                                        "example": 3
+                                    },
+                                    "fecha_solicitud": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-01-01"
+                                    },
+                                    "datos_adicionales": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Información adicional"
+                                    },
+                                    "estado": {
+                                        "type": "boolean",
+                                        "format": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Solicitud de adopción registrada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/solicitudDeAdopcion"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error de validación"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/solicitudes/{id}": {
+            "get": {
+                "tags": [
+                    "Solicitudes"
+                ],
+                "summary": "Obtener información de una solicitud de adopción",
+                "description": "Obtiene información de una solicitud de adopción por su ID.",
+                "operationId": "showSolicitud",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la solicitud de adopción",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Información de la solicitud de adopción",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/solicitudDeAdopcion"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Solicitud de adopción no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Solicitud de adopción no encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Solicitudes"
+                ],
+                "summary": "Actualizar una solicitud de adopción",
+                "description": "Actualiza una solicitud de adopción existente por su ID con la información proporcionada.",
+                "operationId": "updateSolicitud",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la solicitud de adopción",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Datos actualizados de la solicitud de adopción",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_del_usuario",
+                                    "id_del_adoptante",
+                                    "id_del_animal",
+                                    "fecha_solicitud",
+                                    "estado"
+                                ],
+                                "properties": {
+                                    "id_del_usuario": {
+                                        "type": "integer",
+                                        "format": "int",
+                                        "example": 1
+                                    },
+                                    "id_del_adoptante": {
+                                        "type": "integer",
+                                        "format": "int",
+                                        "example": 2
+                                    },
+                                    "id_del_animal": {
+                                        "type": "integer",
+                                        "format": "int",
+                                        "example": 3
+                                    },
+                                    "fecha_solicitud": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-01-01"
+                                    },
+                                    "datos_adicionales": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Información adicional actualizada"
+                                    },
+                                    "estado": {
+                                        "type": "boolean",
+                                        "format": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Solicitud de adopción actualizada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/solicitudDeAdopcion"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Solicitud de adopción no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Solicitud de adopción no encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/usuarios": {
             "get": {
                 "tags": [
@@ -1506,6 +2016,28 @@
                 },
                 "type": "object"
             },
+            "movimientosAnimales": {
+                "title": "movimientosAnimales",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "id_solicitud": {
+                        "type": "integer"
+                    },
+                    "id_rescate": {
+                        "type": "integer"
+                    },
+                    "id_usuario": {
+                        "type": "integer"
+                    },
+                    "fecha_movimiento": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                },
+                "type": "object"
+            },
             "rescate": {
                 "title": "rescate",
                 "properties": {
@@ -1530,6 +2062,34 @@
                     },
                     "id_animal": {
                         "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "solicitudDeAdopcion": {
+                "title": "solicitudDeAdopcion",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "id_del_usuario": {
+                        "type": "integer"
+                    },
+                    "id_del_adoptante": {
+                        "type": "integer"
+                    },
+                    "id_del_animal": {
+                        "type": "integer"
+                    },
+                    "fecha_solicitud": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "datos_adicionales": {
+                        "type": "string"
+                    },
+                    "estado": {
+                        "type": "boolean"
                     }
                 },
                 "type": "object"

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('rescates', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_usuario')->constrained('usuarios');
+            $table->foreignId('id_usuario')->constrained('usuario');
             $table->string('estado');
             $table->string('direccion');
             $table->timestamp('fecha_rescate');
@@ -23,6 +23,11 @@ return new class extends Migration
         });
     }
 
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
     public function down()
     {
         Schema::dropIfExists('rescates');
