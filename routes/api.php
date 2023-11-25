@@ -25,6 +25,8 @@ use App\Http\Controllers\AnimalesController;
 use App\Http\Controllers\EstadoEventoController;
 use App\Http\Controllers\AdoptanteController;
 use App\Http\Controllers\RescateController;
+use App\Http\Controllers\SolicitudDeAdopcionController;
+use App\Http\Controllers\MovimientosAnimalesController;
 
 
 /*
@@ -63,6 +65,19 @@ Route::post('/rescates', [RescateController::class, 'store']);
 Route::post('/rescatesA', [RescateController::class, 'store2']);
 Route::put('/rescates', [RescateController::class, 'udpate']);
 Route::get('/rescates/{id}', [RescateController::class, 'show']);
+
+Route::get('/movimientos-animales', [MovimientosAnimalesController::class, 'index']);
+Route::post('/movimientos-animales', [MovimientosAnimalesController::class, 'store']);
+Route::put('/movimientos-animales/{id}', [MovimientosAnimalesController::class, 'update']);
+Route::delete('/movimientos-animales/{id}', [MovimientosAnimalesController::class, 'destroy']);
+
+// Rutas para obtener y crear solicitudes
+Route::get('/solicitudes', [SolicitudDeAdopcionController::class, 'index']);
+Route::post('/solicitudes', [SolicitudDeAdopcionController::class, 'store']);
+// Rutas para obtener, actualizar y eliminar solicitudes por ID
+Route::get('/solicitudes/{id}', [SolicitudDeAdopcionController::class, 'show']);
+Route::put('/solicitudes/{id}', [SolicitudDeAdopcionController::class, 'update']);
+Route::delete('/solicitudes/{id}', [SolicitudDeAdopcionController::class, 'destroy']);
 
 // Obtener todos los estados de eventos
 Route::get('/estadoEvento', [EstadoEventoController::class, 'index']);
