@@ -87,12 +87,12 @@ class SolicitudDeAdopcionController extends Controller
     {
         // Validar los datos recibidos en la solicitud
         $request->validate([
-            'id_del_usuario' => 'required|integer',
+            'id_del_usuario' => 'nullable|integer',
             'id_del_adoptante' => 'required|integer',
             'id_del_animal' => 'required|integer',
             'fecha_solicitud' => 'required|date',
             'datos_adicionales' => 'string',
-            'estado' => 'required|boolean',
+            'estado' => 'required|integer',
         ]);
 
         // Crear una nueva solicitud de adopción
