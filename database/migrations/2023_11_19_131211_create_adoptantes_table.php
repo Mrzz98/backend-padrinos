@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('adoptantes', function (Blueprint $table) {
             $table->id();
+            $table->string('ci')->unique();
             $table->string('nombre');
             $table->string('apellido');
             $table->string('correo_electronico');

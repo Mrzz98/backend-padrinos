@@ -145,4 +145,49 @@ class AdoptanteController extends Controller
 
         return response()->json($adoptante, 200);
     }
+
+    /**
+     * @OA\Get(
+     *     path="/adoptantes/{ci}",
+     *     tags={"Adoptantes"},
+     *     summary="Obtener información de un adoptante por CI",
+     *     description="Obtiene información de un adoptante por su CI.",
+     *     operationId="showByCI",
+     *     @OA\Parameter(
+     *         name="ci",
+     *         in="path",
+     *         description="Cédula de identidad del adoptante",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Información del adoptante",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             ref="#/components/schemas/adoptante"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Adoptante no encontrado",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Adoptante no encontrado"),
+     *         )
+     *     )
+     * )
+     */
+    public function showByCI($ci)
+    {
+        // Buscar el adoptante por su CI en la base de datos
+        $adoptante = Adoptante::where('ci', $ci)->first();
+
+        // Verificar si el adoptante existe
+        if (!$adoptante) {
+            return response()->json(['error' => 'Adoptante no encontrado'], 404);
+        }
+
+        return response()->json($adoptante, 200);
+    }
 }

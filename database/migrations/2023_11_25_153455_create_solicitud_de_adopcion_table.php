@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('solicitud_de_adopcion', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_del_usuario');
+            $table->unsignedBigInteger('id_del_usuario')->nullable();
             $table->unsignedBigInteger('id_del_adoptante');
             $table->unsignedBigInteger('id_del_animal');
             $table->date('fecha_solicitud');

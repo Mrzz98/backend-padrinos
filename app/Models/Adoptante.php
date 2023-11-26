@@ -13,6 +13,7 @@ class Adoptante extends Model
     public $timestamps = true;
 
     protected $fillable = [
+        'ci',
         'nombre',
         'apellido',
         'correo_electronico',
