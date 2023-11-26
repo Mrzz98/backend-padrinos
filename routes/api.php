@@ -59,6 +59,7 @@ Route::get('/animales/report/pdf', [AnimalesController::class, 'generarPDFAnimal
 Route::get('/adoptantes', [AdoptanteController::class, 'getAll']);
 Route::post('/adoptantes', [AdoptanteController::class, 'store']);
 Route::get('/adoptantes/{id}', [AdoptanteController::class, 'show']);
+Route::get('/adoptantes/{ci}', [AdoptanteController::class, 'showByCI']);
 
 Route::get('/rescates', [RescateController::class, 'index']);
 Route::post('/rescates', [RescateController::class, 'store']);
