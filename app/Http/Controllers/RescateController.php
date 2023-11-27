@@ -339,4 +339,97 @@ class RescateController extends Controller
 
         return response()->json(null, 204);
     }
+
+
+    /**
+     * @OA\Put(
+     *     path="/rescates-animal/{id}",
+     *     tags={"Rescates"},
+     *     summary="Actualizar un rescate con información detallada del animal",
+     *     description="Actualizar un rescate existente con información detallada del animal proporcionada.",
+     *     operationId="updateRescateAnimal",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID del rescate",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Datos del rescate con información detallada del animal",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="id_usuario", type="integer", format="int", example=1),
+     *             @OA\Property(property="direccion", type="string", format="string", example="Nueva dirección del rescate"),
+     *             @OA\Property(property="estado", type="string", format="string", example="En proceso"),
+     *             @OA\Property(property="fecha_rescate", type="string", format="date", example="2023-11-20"),
+     *             @OA\Property(property="informacion_adicional", type="string", format="string"),
+     *             @OA\Property(
+     *                 property="id_animal",
+     *                 type="object",
+     *                 required={"nombre", "especie", "tamano", "edad", "descripcion"},
+     *                 @OA\Property(property="nombre", type="string", format="string", example="Nuevo nombre del animal"),
+     *                 @OA\Property(property="especie", type="string", format="string", example="Nueva especie del animal"),
+     *                 @OA\Property(property="tamano", type="string", format="string", example="Nuevo tamaño del animal"),
+     *                 @OA\Property(property="edad", type="integer", format="int", example=4),
+     *                 @OA\Property(property="descripcion", type="string", format="string", example="Nueva descripción del animal"),
+     *             ),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Rescate actualizado exitosamente",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             ref="#/components/schemas/rescate"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Rescate no encontrado",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Rescate no encontrado"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validación fallida",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Error de validación"),
+     *             @OA\Property(property="errors", type="object"),
+     *         )
+     *     )
+     * )
+     */
+    public function updateWithAnimal(Request $request, $id)
+    {
+        $request->validate([
+            'id_usuario' => 'sometimes|required|integer',
+            'direccion' => 'sometimes|required|string',
+            'estado' => 'sometimes|required|string',
+            'fecha_rescate' => 'sometimes|required|date',
+            'informacion_adicional' => 'sometimes|nullable|string',
+            'id_animal.nombre' => 'sometimes|required|string',
+            'id_animal.especie' => 'sometimes|required|string',
+            'id_animal.tamano' => 'sometimes|string',
+            'id_animal.edad' => 'sometimes|integer',
+            'id_animal.descripcion' => 'sometimes|string',
+        ]);
+
+        $rescate = Rescate::find($id);
+
+        if (!$rescate) {
+            return response()->json(['error' => 'Rescate no encontrado'], 404);
+        }
+
+        // Actualizar el animal
+        $rescate->animal->update($request->input('id_animal'));
+
+        // Actualizar el rescate
+        $rescate->update($request->all());
+
+        return response()->json($rescate, 200);
+    }
 }

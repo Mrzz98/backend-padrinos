@@ -64,9 +64,11 @@ Route::get('/adoptantes/{ci}', [AdoptanteController::class, 'showByCI']);
 Route::get('/rescates', [RescateController::class, 'index']);
 Route::post('/rescates', [RescateController::class, 'store']);
 Route::post('/rescatesA', [RescateController::class, 'store2']);
-Route::put('/rescates', [RescateController::class, 'udpate']);
+Route::put('/rescates/{id}', [RescateController::class, 'udpate']);
 Route::get('/rescates/{id}', [RescateController::class, 'show']);
 Route::delete('/rescates/{id}', [RescateController::class, 'destroy']);
+Route::put('/rescates-animal/{id}', [RescateController::class, 'updateWithAnimal']);
+
 
 Route::get('/movimientos-animales', [MovimientosAnimalesController::class, 'index']);
 Route::post('/movimientos-animales', [MovimientosAnimalesController::class, 'store']);
