@@ -11,6 +11,10 @@ class Rescate extends Model
     protected $table = 'rescates';
     protected $primaryKey = 'id';
     public $timestamps = true;
+    public function animal()
+    {
+        return $this->belongsTo(Animal::class, 'id_animal');
+    }
 
     protected $fillable = [
         'id_usuario',

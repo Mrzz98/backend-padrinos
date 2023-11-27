@@ -40,7 +40,10 @@ class RescateController extends Controller
      */
     public function index()
     {
-        $rescates = Rescate::all();
+        // $rescates = Rescate::all();
+        // return response()->json($rescates, 200);
+        $rescates = Rescate::with('animal')->get();
+
         return response()->json($rescates, 200);
     }
 
