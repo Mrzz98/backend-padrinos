@@ -13,7 +13,7 @@ use App\Models\Animal;
  *     @OA\Property(property="id", type="integer"),
  *     @OA\Property(property="nombre", type="string"),
  *     @OA\Property(property="especie", type="string"),
- *     @OA\Property(property="raza", type="string"),
+ *     @OA\Property(property="tamano", type="string"),
  *     @OA\Property(property="edad", type="integer"),
  *     @OA\Property(property="descripcion", type="string"),
  * )
@@ -58,7 +58,7 @@ class AnimalesController extends Controller
      *             required={"nombre", "especie"},
      *             @OA\Property(property="nombre", type="string", format="string", example="Nombre"),
      *             @OA\Property(property="especie", type="string", format="string", example="Especie"),
-     *             @OA\Property(property="raza", type="string", format="string", example="Raza"),
+     *             @OA\Property(property="tamano", type="string", format="string", example="tamano"),
      *             @OA\Property(property="edad", type="integer", format="int", example=3),
      *             @OA\Property(property="descripcion", type="string", format="string", example="Descripción del animal"),
      *         )
@@ -88,7 +88,7 @@ class AnimalesController extends Controller
         $request->validate([
             'nombre' => 'required|string',
             'especie' => 'required|string',
-            'raza' => 'string',
+            'tamano' => 'string',
             'edad' => 'integer',
             'descripcion' => 'string',
         ]);
@@ -97,7 +97,7 @@ class AnimalesController extends Controller
         $animal = Animal::create([
             'nombre' => $request->input('nombre'),
             'especie' => $request->input('especie'),
-            'raza' => $request->input('raza'),
+            'tamano' => $request->input('tamano'),
             'edad' => $request->input('edad'),
             'descripcion' => $request->input('descripcion'),
         ]);
