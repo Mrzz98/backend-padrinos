@@ -86,12 +86,12 @@ class RescateController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_usuario' => 'required|exists:usuarios,id',
+            'id_usuario' => 'required|integer',
             'direccion' => 'required|string',
             'estado' => 'required|string',
             'fecha_rescate' => 'required|date',
             'informacion_adicional' => 'nullable|string',
-            'id_animal' => 'required|exists:animales,id',
+            'id_animal' => 'required|integer',
         ]);
 
         $rescate = Rescate::create($request->all());
@@ -147,7 +147,7 @@ class RescateController extends Controller
     public function store2(Request $request)
     {
         $request->validate([
-            'id_usuario' => 'required|exists:usuarios,id',
+            'id_usuario' => 'required|integer',
             'direccion' => 'required|string',
             'estado' => 'required|string',
             'fecha_rescate' => 'required|date',
