@@ -1612,6 +1612,46 @@
                         }
                     }
                 }
+            },
+            "delete": {
+                "tags": [
+                    "Rescates"
+                ],
+                "summary": "Eliminar un rescate",
+                "description": "Elimina un rescate existente por su ID.",
+                "operationId": "deleteRescate",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del rescate",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Rescate eliminado exitosamente"
+                    },
+                    "404": {
+                        "description": "Rescate no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Rescate no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/solicitudes": {

@@ -297,4 +297,46 @@ class RescateController extends Controller
 
         return response()->json($rescate, 200);
     }
+
+    /**
+     * @OA\Delete(
+     *     path="/rescates/{id}",
+     *     tags={"Rescates"},
+     *     summary="Eliminar un rescate",
+     *     description="Elimina un rescate existente por su ID.",
+     *     operationId="deleteRescate",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID del rescate",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Rescate eliminado exitosamente"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Rescate no encontrado",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Rescate no encontrado"),
+     *         )
+     *     )
+     * )
+     */
+
+    public function destroy($id)
+    {
+        $rescate = Rescate::find($id);
+
+        if (!$rescate) {
+            return response()->json(['error' => 'Movimiento de animal no encontrado'], 404);
+        }
+
+        $rescate->delete();
+
+        return response()->json(null, 204);
+    }
 }
