@@ -17,7 +17,7 @@ class CreateAnimalesTable extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('especie');
-            $table->string('raza')->nullable();
+            $table->string('tamano')->nullable();
             $table->integer('edad')->nullable();
             $table->string('descripcion');
             $table->timestamps();

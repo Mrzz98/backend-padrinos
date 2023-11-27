@@ -119,7 +119,7 @@ class RescateController extends Controller
      *             @OA\Property(property="id_animal", type="object", required={"nombre", "especie"}, 
      *                 @OA\Property(property="nombre", type="string", format="string", example="Nombre del animal"),
      *                 @OA\Property(property="especie", type="string", format="string", example="Especie del animal"),
-     *                 @OA\Property(property="raza", type="string", format="string", example="Raza del animal"),
+     *                 @OA\Property(property="tamano", type="string", format="string", example="tamano del animal"),
      *                 @OA\Property(property="edad", type="integer", format="int", example=3),
      *                 @OA\Property(property="descripcion", type="string", format="string", example="Descripción del animal"),
      *             ),
@@ -154,7 +154,7 @@ class RescateController extends Controller
             'informacion_adicional' => 'nullable|string',
             'id_animal.nombre' => 'required|string',
             'id_animal.especie' => 'required|string',
-            'id_animal.raza' => 'string',
+            'id_animal.tamano' => 'string',
             'id_animal.edad' => 'integer',
             'id_animal.descripcion' => 'string',
         ]);

@@ -28,7 +28,7 @@
                 <th>ID</th>
                 <th>Nombre</th>
                 <th>Especie</th>
-                <th>Raza</th>
+                <th>tamano</th>
                 <th>Edad</th>
                 <th>Descripción</th>
                 <th>Fecha de Creación</th>
@@ -41,7 +41,7 @@
                     <td>{{ $animal->id }}</td>
                     <td>{{ $animal->nombre }}</td>
                     <td>{{ $animal->especie }}</td>
-                    <td>{{ $animal->raza }}</td>
+                    <td>{{ $animal->tamano }}</td>
                     <td>{{ $animal->edad }}</td>
                     <td>{{ $animal->descripcion }}</td>
                     <td>{{ $animal->created_at }}</td>

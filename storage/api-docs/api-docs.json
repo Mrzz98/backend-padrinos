@@ -177,6 +177,55 @@
                 }
             }
         },
+        "/adoptantes/{ci}": {
+            "get": {
+                "tags": [
+                    "Adoptantes"
+                ],
+                "summary": "Obtener información de un adoptante por CI",
+                "description": "Obtiene información de un adoptante por su CI.",
+                "operationId": "showByCI",
+                "parameters": [
+                    {
+                        "name": "ci",
+                        "in": "path",
+                        "description": "Cédula de identidad del adoptante",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Información del adoptante",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/adoptante"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Adoptante no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Adoptante no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/animales": {
             "get": {
                 "tags": [
@@ -1343,10 +1392,10 @@
                                                 "format": "string",
                                                 "example": "Especie del animal"
                                             },
-                                            "raza": {
+                                            "tamano": {
                                                 "type": "string",
                                                 "format": "string",
-                                                "example": "Raza del animal"
+                                                "example": "tamano del animal"
                                             },
                                             "edad": {
                                                 "type": "integer",
