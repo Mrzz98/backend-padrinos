@@ -111,7 +111,7 @@ class AnimalesController extends Controller
             'tamano' => $request->input('tamano'),
             'edad' => $request->input('edad'),
             'descripcion' => $request->input('descripcion'),
-            'image_path' => 'images/' . $imageName, // Aquí se guarda la ruta de la imagen en la base de datos
+            'imagen_path' => 'images/' . $imageName, // Aquí se guarda la ruta de la imagen en la base de datos
         ]);
 
         // Agregar la URL completa de la imagen al objeto animal
