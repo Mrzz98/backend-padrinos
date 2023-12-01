@@ -106,10 +106,10 @@ class AnimalesController extends Controller
 
         // Guardar la imagen si se proporciona
         if ($request->has('imagen')) {
-            $base64Image = $request->input('imagen');
+            $base64Image = urldecode($request->input('imagen'));
 
             // Decodificar la cadena base64
-            $image = base64_decode(urldecode($base64Image));
+            $image = base64_decode($base64Image);
 
             // Generar un nombre de archivo único
             $imageName = 'animal_' . $animal->id . '_' . time() . '.png'; // Cambia la extensión según el tipo de imagen
@@ -124,6 +124,7 @@ class AnimalesController extends Controller
 
         return response()->json($animal, 201);
     }
+
 
     /**
      * @OA\Get(
