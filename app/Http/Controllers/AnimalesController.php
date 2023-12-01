@@ -92,36 +92,30 @@ class AnimalesController extends Controller
             'tamano' => 'string',
             'edad' => 'integer',
             'descripcion' => 'string',
-            'imagen' => 'string', // Puedes ajustar las reglas de validación según tus necesidades
+            'imagen' => 'required|string',
         ]);
 
-        // Crear un nuevo animal
+        // Decodificar la imagen
+        $imagen = base64_decode(urldecode($request->input('imagen')));
+
+        // Crear un nombre único para la imagen
+        $imageName = time() . '.png';
+
+        // Guardar la imagen en el servidor
+        file_put_contents(public_path('images/' . $imageName), $imagen);
+
+        // Crear un nuevo animal con la ruta de la imagen
         $animal = Animal::create([
             'nombre' => $request->input('nombre'),
             'especie' => $request->input('especie'),
             'tamano' => $request->input('tamano'),
             'edad' => $request->input('edad'),
             'descripcion' => $request->input('descripcion'),
-            'image_path' => $request->input('imagen')
+            'image_path' => 'images/' . $imageName, // Aquí se guarda la ruta de la imagen en la base de datos
         ]);
 
-        // Guardar la imagen si se proporciona
-        if ($request->has('imagen')) {
-            $base64Image = urldecode($request->input('imagen'));
-
-            // Decodificar la cadena base64
-            $image = base64_decode($base64Image);
-
-            // Generar un nombre de archivo único
-            $imageName = 'animal_' . $animal->id . '_' . time() . '.png'; // Cambia la extensión según el tipo de imagen
-            $path = 'public/storage/' . $imageName;
-
-            // Guardar la imagen en la carpeta public/storage
-            Storage::put($path, $image);
-
-            // Actualizar la ruta de la imagen en la base de datos
-            $animal->update(['imagen_path' => $path]);
-        }
+        // Agregar la URL completa de la imagen al objeto animal
+        $animal->imagen = url($animal->imagen);
 
         return response()->json($animal, 201);
     }
@@ -169,15 +163,8 @@ class AnimalesController extends Controller
             return response()->json(['error' => 'Animal no encontrado'], 404);
         }
 
-        // Agregar la URL de la imagen a la respuesta JSON si existe
-        $responseData = $animal->toArray();
-        if ($animal->imagen_path) {
-            $responseData['imagen_url'] = asset($animal->imagen_path);
-        }
-
-        return response()->json($responseData, 200);
+        return response()->json($animal, 200);
     }
-
 
     /**
      * @OA\Get(
