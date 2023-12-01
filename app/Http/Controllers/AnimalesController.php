@@ -96,12 +96,12 @@ class AnimalesController extends Controller
         ]);
 
         // Decodificar la imagen
-        $imagen = base64_decode(urldecode($request->input('imagen')));
+        $imagen = base64_decode(urldecode(str_replace('data:image/png;base64,', '', $request->input('imagen'))));
 
         // Crear un nombre único para la imagen
         $imageName = time() . '.png';
 
-        // Guardar la imagen en el servidor
+        // Guardar la imagen en el servidor en public/images
         file_put_contents(public_path('images/' . $imageName), $imagen);
 
         // Crear un nuevo animal con la ruta de la imagen
@@ -115,7 +115,7 @@ class AnimalesController extends Controller
         ]);
 
         // Agregar la URL completa de la imagen al objeto animal
-        $animal->imagen = url($animal->imagen);
+        $animal->imagen = url('images/' . $imageName);
 
         return response()->json($animal, 201);
     }
