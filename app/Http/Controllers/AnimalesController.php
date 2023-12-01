@@ -102,6 +102,7 @@ class AnimalesController extends Controller
             'tamano' => $request->input('tamano'),
             'edad' => $request->input('edad'),
             'descripcion' => $request->input('descripcion'),
+            'image_path' => $request->input('imagen')
         ]);
 
         // Guardar la imagen si se proporciona
