@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\PDF;
 use App\Models\Animal;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @OA\Schema(
@@ -91,6 +92,7 @@ class AnimalesController extends Controller
             'tamano' => 'string',
             'edad' => 'integer',
             'descripcion' => 'string',
+            'imagen' => 'string', // Puedes ajustar las reglas de validación según tus necesidades
         ]);
 
         // Crear un nuevo animal
@@ -101,6 +103,22 @@ class AnimalesController extends Controller
             'edad' => $request->input('edad'),
             'descripcion' => $request->input('descripcion'),
         ]);
+
+        // Guardar la imagen si se proporciona
+        if ($request->has('imagen')) {
+            $base64Image = $request->input('imagen');
+            $image = base64_decode($base64Image);
+
+            // Generar un nombre de archivo único
+            $imageName = 'animal_' . $animal->id . '_' . time() . '.png'; // Cambia la extensión según el tipo de imagen
+            $path = 'public/storage/' . $imageName;
+
+            // Guardar la imagen en la carpeta public/storage
+            Storage::put($path, $image);
+
+            // Actualizar la ruta de la imagen en la base de datos
+            $animal->update(['imagen_path' => $path]);
+        }
 
         return response()->json($animal, 201);
     }
@@ -147,8 +165,15 @@ class AnimalesController extends Controller
             return response()->json(['error' => 'Animal no encontrado'], 404);
         }
 
-        return response()->json($animal, 200);
+        // Agregar la URL de la imagen a la respuesta JSON si existe
+        $responseData = $animal->toArray();
+        if ($animal->imagen_path) {
+            $responseData['imagen_url'] = asset($animal->imagen_path);
+        }
+
+        return response()->json($responseData, 200);
     }
+
 
     /**
      * @OA\Get(

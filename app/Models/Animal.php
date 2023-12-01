@@ -22,6 +22,7 @@ class Animal extends Model
         'tamano',
         'edad',
         'descripcion',
+        'image_path'
     ];
 
     // Otras propiedades, como $hidden, $casts, $dates, etc., si es necesario
