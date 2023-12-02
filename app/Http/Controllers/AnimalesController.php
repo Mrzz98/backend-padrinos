@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\PDF;
 use App\Models\Animal;
+use App\Http\Controllers\ImageController;
 
 /**
  * @OA\Schema(
@@ -20,6 +21,14 @@ use App\Models\Animal;
  */
 class AnimalesController extends Controller
 {
+
+    protected $imageController;
+
+    public function __construct(ImageController $imageController)
+    {
+        $this->imageController = $imageController;
+    }
+
     /**
      * @OA\Get(
      *     path="/animales",
@@ -82,8 +91,9 @@ class AnimalesController extends Controller
      *     )
      * )
      */
-    public function store(Request $request, ImageController $imageController)
+    public function store(Request $request)
     {
+        
         // Validar los datos recibidos en la solicitud
         $request->validate([
             'nombre' => 'required|string',
@@ -95,7 +105,7 @@ class AnimalesController extends Controller
         ]);
 
         // Llamar al método storeImage para manejar la subida y almacenamiento de la imagen
-        $imageName = $imageController->storeImage($request);
+        $imageName = $this->imageController->storeImage($request);
 
         // Crear un nuevo animal y asignar el nombre de la imagen a imagen_path
         $animal = Animal::create([
