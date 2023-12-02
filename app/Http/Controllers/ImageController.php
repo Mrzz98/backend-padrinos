@@ -7,10 +7,10 @@ use Illuminate\Http\Request;
 class ImageController extends Controller
 {
     // View File To Upload Image
-    public function index()
-    {
-        return view('image-form');
-    }
+    // public function index()
+    // {
+    //     return view('image-form');
+    // }
 
     // Store Image
     public function storeImage(Request $request)
@@ -33,7 +33,6 @@ class ImageController extends Controller
         //Store IMage in DB 
 
 
-        return back()->with('success', 'Image uploaded Successfully!')
-        ->with('image', $imageName);
+        return response()->json(['image' => $imageName]);
     }
 }
