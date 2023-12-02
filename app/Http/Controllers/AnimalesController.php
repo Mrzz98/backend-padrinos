@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\PDF;
 use App\Models\Animal;
+use Illuminate\Support\Facades\File;
 
 /**
  * @OA\Schema(
@@ -38,11 +39,19 @@ class AnimalesController extends Controller
      * )
      */
     public function index()
-    {
-        $animales = Animal::all(); // Recupera todos los animales de la base de datos
+{
+    $animales = Animal::all();
 
-        return response()->json($animales, 200);
-    }
+    // Transformar cada animal para incluir la URL completa
+    $animalesTransformados = $animales->map(function ($animal) {
+        // Agregar la URL completa a la propiedad imagen_path
+        $animal->imagen_path = asset('images/' . $animal->imagen_path);
+
+        return $animal;
+    });
+
+    return response()->json($animalesTransformados, 200);
+}
 
     /**
      * @OA\Post(
@@ -95,39 +104,26 @@ class AnimalesController extends Controller
         ]);
 
         // if ($request->has('image') && is_string($request->image)) {
-            // Obtener la extensión de la imagen
-            $extension = explode('/', mime_content_type($request->image))[1];
-        
-            // Generar un nombre único para la imagen
-            $imageName = time() . '.' . $extension;
-        
-            // Decodificar la imagen base64 y guardarla en la carpeta de imágenes
-            file_put_contents(public_path('images/') . $imageName, base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->image)));
-        
-            // Crear un nuevo animal
-            $animal = Animal::create([
-                'nombre' => $request->input('nombre'),
-                'especie' => $request->input('especie'),
-                'tamano' => $request->input('tamano'),
-                'edad' => $request->input('edad'),
-                'descripcion' => $request->input('descripcion'),
-                'imagen_path' => $imageName,
-            ]);
-        
-            return response()->json($animal, 201);
-        // }
+        // Obtener la extensión de la imagen
+        $extension = explode('/', mime_content_type($request->image))[1];
 
-        // // Crear un nuevo animal
-        // $animal = Animal::create([
-        //     'nombre' => $request->input('nombre'),
-        //     'especie' => $request->input('especie'),
-        //     'tamano' => $request->input('tamano'),
-        //     'edad' => $request->input('edad'),
-        //     'descripcion' => $request->input('descripcion'),
-        //     'imagen_path' => $imageName
-        // ]);
+        // Generar un nombre único para la imagen
+        $imageName = time() . '.' . $extension;
 
-        // return response()->json($animal, 201);
+        // Decodificar la imagen base64 y guardarla en la carpeta de imágenes
+        file_put_contents(public_path('images/') . $imageName, base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->image)));
+
+        // Crear un nuevo animal
+        $animal = Animal::create([
+            'nombre' => $request->input('nombre'),
+            'especie' => $request->input('especie'),
+            'tamano' => $request->input('tamano'),
+            'edad' => $request->input('edad'),
+            'descripcion' => $request->input('descripcion'),
+            'imagen_path' => $imageName,
+        ]);
+
+        return response()->json($animal, 201);
     }
 
     /**
@@ -198,5 +194,57 @@ class AnimalesController extends Controller
         $pdf = $PDF::loadView('reporte_animales', $data); // Asegúrate de tener una vista llamada 'reporte_animales'
 
         return $pdf->stream('reporte_animales.pdf');
+    }
+
+    /**
+     * @OA\Delete(
+     *     path="/animales/{id}",
+     *     tags={"Animales"},
+     *     summary="Eliminar un animal",
+     *     description="Elimina un animal por su ID.",
+     *     operationId="destroyAnimal",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID del animal a eliminar",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Animal eliminado exitosamente",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Animal eliminado con éxito"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Animal no encontrado",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Animal no encontrado"),
+     *         )
+     *     )
+     * )
+     */
+    public function destroy($id)
+    {
+        // Buscar el animal que se va a eliminar
+        $animal = Animal::findOrFail($id);
+
+        // Obtener la ruta de la imagen
+        $imagePath = public_path('images/') . $animal->imagen_path;
+
+        // Verificar si la imagen existe antes de intentar eliminarla
+        if (File::exists($imagePath)) {
+            // Eliminar la imagen
+            File::delete($imagePath);
+        }
+
+        // Eliminar el animal de la base de datos
+        $animal->delete();
+
+        return response()->json(['message' => 'Animal eliminado con éxito']);
     }
 }
