@@ -91,7 +91,7 @@ class AnimalesController extends Controller
             'tamano' => 'string',
             'edad' => 'integer',
             'descripcion' => 'string',
-            'imagen_path' => 'string'
+            'imagen_path' => 'required|image|mimes:png,jpg,jpeg|max:2048'
         ]);
 
         $imageName = time().'.'.$request->imagen_path->extension();
