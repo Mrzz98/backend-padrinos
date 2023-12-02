@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\PDF;
 use App\Models\Animal;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * @OA\Schema(
@@ -92,34 +91,21 @@ class AnimalesController extends Controller
             'tamano' => 'string',
             'edad' => 'integer',
             'descripcion' => 'string',
-            'imagen' => 'required|string',
+            'imagen_path' => 'string'
         ]);
 
-        // Decodificar la imagen
-        $imagen = base64_decode(urldecode(str_replace('data:image/png;base64,', '', $request->input('imagen'))));
-
-        // Crear un nombre único para la imagen
-        $imageName = time() . '.png';
-
-        // Guardar la imagen en el servidor en public/images
-        file_put_contents(public_path('images/' . $imageName), $imagen);
-
-        // Crear un nuevo animal con la ruta de la imagen
+        // Crear un nuevo animal
         $animal = Animal::create([
             'nombre' => $request->input('nombre'),
             'especie' => $request->input('especie'),
             'tamano' => $request->input('tamano'),
             'edad' => $request->input('edad'),
             'descripcion' => $request->input('descripcion'),
-            'imagen_path' => 'images/' . $imageName, // Aquí se guarda la ruta de la imagen en la base de datos
+            'imagen_path' => $request->input('imagen_path')
         ]);
-
-        // Agregar la URL completa de la imagen al objeto animal
-        $animal->imagen = url('images/' . $imageName);
 
         return response()->json($animal, 201);
     }
-
 
     /**
      * @OA\Get(

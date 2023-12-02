@@ -24,6 +24,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AnimalesController;
 use App\Http\Controllers\EstadoEventoController;
 use App\Http\Controllers\AdoptanteController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\RescateController;
 use App\Http\Controllers\SolicitudDeAdopcionController;
 use App\Http\Controllers\MovimientosAnimalesController;
@@ -98,3 +99,7 @@ Route::get('/usuarios/report/pdf', [UserController::class, 'generarPDF']);
 
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::get('/usuarios', [UserController::class, 'index']);
+
+Route::get('/image-upload', [ImageController::class, 'index']);
+Route::post('/upload-image', [ImageController::class, 'storeImage'])->name('image.store');
+
