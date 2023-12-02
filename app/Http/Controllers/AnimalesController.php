@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\PDF;
 use App\Models\Animal;
-use App\Http\Controllers\ImageController;
-use Illuminate\Support\Facades\Http;
 
 /**
  * @OA\Schema(
@@ -22,8 +20,6 @@ use Illuminate\Support\Facades\Http;
  */
 class AnimalesController extends Controller
 {
-
-
     /**
      * @OA\Get(
      *     path="/animales",
@@ -95,35 +91,20 @@ class AnimalesController extends Controller
             'tamano' => 'string',
             'edad' => 'integer',
             'descripcion' => 'string',
-            'image' => 'required|image|mimes:png,jpg,jpeg|max:2048',
+            'imagen_path' => 'string'
         ]);
 
-        $imageName = time().'.'.$request->image->extension();
+        // Crear un nuevo animal
+        $animal = Animal::create([
+            'nombre' => $request->input('nombre'),
+            'especie' => $request->input('especie'),
+            'tamano' => $request->input('tamano'),
+            'edad' => $request->input('edad'),
+            'descripcion' => $request->input('descripcion'),
+            'imagen_path' => $request->input('imagen_path')
+        ]);
 
-        // Public Folder
-        $request->image->move(public_path('images'), $imageName);
-        
-
-        
-        // if ($response->successful()) {
-            // Obtener el nombre de la imagen desde la respuesta
-            
-
-            // Crear un nuevo animal y asignar el nombre de la imagen a imagen_path
-            $animal = Animal::create([
-                'nombre' => $request->input('nombre'),
-                'especie' => $request->input('especie'),
-                'tamano' => $request->input('tamano'),
-                'edad' => $request->input('edad'),
-                'descripcion' => $request->input('descripcion'),
-                'imagen_path' => $imageName,
-            ]);
-
-            return response()->json($animal, 201);
-        // } else {
-            // Manejar la situación en la que la petición no fue exitosa
-            // return response()->json(['error' => 'Error al subir la imagen'], $response->status());
-        // }
+        return response()->json($animal, 201);
     }
 
     /**
