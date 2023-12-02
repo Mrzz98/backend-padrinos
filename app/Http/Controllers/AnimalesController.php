@@ -91,10 +91,10 @@ class AnimalesController extends Controller
             'tamano' => 'string',
             'edad' => 'integer',
             'descripcion' => 'string',
-            'imagen_path' => 'required|image|mimes:png,jpg,jpeg|max:2048'
+            'image' => 'required|image|mimes:png,jpg,jpeg|max:2048'
         ]);
 
-        $imageName = time().'.'.$request->imagen_path->extension();
+        $imageName = time().'.'.$request->image->extension();
 
         // Public Folder
         $request->image->move(public_path('images'), $imageName);
@@ -106,7 +106,7 @@ class AnimalesController extends Controller
             'tamano' => $request->input('tamano'),
             'edad' => $request->input('edad'),
             'descripcion' => $request->input('descripcion'),
-            'imagen_path' => $request->$imageName
+            'imagen_path' => $imageName
         ]);
 
         return response()->json($animal, 201);
