@@ -101,5 +101,5 @@ Route::post('/logout', [AuthController::class, 'logout']);
 Route::get('/usuarios', [UserController::class, 'index']);
 
 Route::get('/image-upload', [ImageController::class, 'index']);
-Route::post('/upload-image', [ImageController::class, 'storeImage'])->name('image.store');
+// Route::post('/upload-image', [ImageController::class, 'storeImage'])->name('image.store');
 
