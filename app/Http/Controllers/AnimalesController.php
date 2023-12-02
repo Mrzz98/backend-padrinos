@@ -22,12 +22,6 @@ use App\Http\Controllers\ImageController;
 class AnimalesController extends Controller
 {
 
-    protected $imageController;
-
-    public function __construct(ImageController $imageController)
-    {
-        $this->imageController = $imageController;
-    }
 
     /**
      * @OA\Get(
@@ -105,7 +99,7 @@ class AnimalesController extends Controller
         ]);
 
         // Llamar al método storeImage para manejar la subida y almacenamiento de la imagen
-        $imageName = $this->imageController->storeImage($request);
+        $imageName = ImageController::storeImage($request);
 
         // Crear un nuevo animal y asignar el nombre de la imagen a imagen_path
         $animal = Animal::create([
