@@ -82,7 +82,7 @@ class AnimalesController extends Controller
      *     )
      * )
      */
-    public function store(Request $request)
+    public function store(Request $request, ImageController $imageController)
     {
         // Validar los datos recibidos en la solicitud
         $request->validate([
@@ -91,17 +91,20 @@ class AnimalesController extends Controller
             'tamano' => 'string',
             'edad' => 'integer',
             'descripcion' => 'string',
-            'imagen_path' => 'string'
+            'image' => 'required|image|mimes:png,jpg,jpeg|max:2048', // Asegúrate de tener este campo en tu formulario
         ]);
 
-        // Crear un nuevo animal
+        // Llamar al método storeImage para manejar la subida y almacenamiento de la imagen
+        $imageName = $imageController->storeImage($request);
+
+        // Crear un nuevo animal y asignar el nombre de la imagen a imagen_path
         $animal = Animal::create([
             'nombre' => $request->input('nombre'),
             'especie' => $request->input('especie'),
             'tamano' => $request->input('tamano'),
             'edad' => $request->input('edad'),
             'descripcion' => $request->input('descripcion'),
-            'imagen_path' => $request->input('imagen_path')
+            'imagen_path' => $imageName, // Asignar el nombre de la imagen aquí
         ]);
 
         return response()->json($animal, 201);
