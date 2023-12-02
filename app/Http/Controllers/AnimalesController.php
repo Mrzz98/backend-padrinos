@@ -94,6 +94,11 @@ class AnimalesController extends Controller
             'imagen_path' => 'string'
         ]);
 
+        $imageName = time().'.'.$request->image->extension();
+
+        // Public Folder
+        $request->image->move(public_path('images'), $imageName);
+
         // Crear un nuevo animal
         $animal = Animal::create([
             'nombre' => $request->input('nombre'),
@@ -101,7 +106,7 @@ class AnimalesController extends Controller
             'tamano' => $request->input('tamano'),
             'edad' => $request->input('edad'),
             'descripcion' => $request->input('descripcion'),
-            'imagen_path' => $request->input('imagen_path')
+            'imagen_path' => $request->$imageName
         ]);
 
         return response()->json($animal, 201);
