@@ -25,6 +25,7 @@ class ImageController extends Controller
         // Public Folder
         $request->image->move(public_path('images'), $imageName);
 
+        
         // //Store in Storage Folder
         // $request->image->storeAs('images', $imageName);
 
