@@ -91,7 +91,7 @@ class AnimalesController extends Controller
             'tamano' => 'string',
             'edad' => 'integer',
             'descripcion' => 'string',
-            'image' => 'required|image|mimes:png,jpg,jpeg|max:2048'
+            'image' => 'required|string'
         ]);
 
         // if ($request->has('image') && is_string($request->image)) {
