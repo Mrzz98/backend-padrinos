@@ -55,6 +55,7 @@ Route::middleware(['api'])->group(function() {
 Route::get('/animales', [AnimalesController::class, 'index']);
 Route::post('/animales', [AnimalesController::class, 'store']);
 Route::get('/animales/{id}', [AnimalesController::class, 'show']);
+Route::delete('/animales/{id}', [AnimalesController::class, 'destroy']);
 Route::get('/animales/report/pdf', [AnimalesController::class, 'generarPDFAnimales']);
 
 Route::get('/adoptantes', [AdoptanteController::class, 'getAll']);

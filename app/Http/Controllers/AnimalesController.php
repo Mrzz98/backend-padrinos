@@ -39,19 +39,19 @@ class AnimalesController extends Controller
      * )
      */
     public function index()
-{
-    $animales = Animal::all();
+    {
+        $animales = Animal::all();
 
-    // Transformar cada animal para incluir la URL completa
-    $animalesTransformados = $animales->map(function ($animal) {
-        // Agregar la URL completa a la propiedad imagen_path
-        $animal->imagen_path = asset('images/' . $animal->imagen_path);
+        // Transformar cada animal para incluir la URL completa
+        $animalesTransformados = $animales->map(function ($animal) {
+            // Agregar la URL completa a la propiedad imagen_path
+            $animal->imagen_path = asset('images/' . $animal->imagen_path);
 
-        return $animal;
-    });
+            return $animal;
+        });
 
-    return response()->json($animalesTransformados, 200);
-}
+        return response()->json($animalesTransformados, 200);
+    }
 
     /**
      * @OA\Post(
