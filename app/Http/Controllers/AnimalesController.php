@@ -94,7 +94,7 @@ class AnimalesController extends Controller
             'imagen_path' => 'string'
         ]);
 
-        $imageName = time().'.'.$request->image->extension();
+        $imageName = time().'.'.$request->imagen_path->extension();
 
         // Public Folder
         $request->image->move(public_path('images'), $imageName);
