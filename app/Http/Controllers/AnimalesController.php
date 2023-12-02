@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\PDF;
 use App\Models\Animal;
 use App\Http\Controllers\ImageController;
+use Illuminate\Support\Facades\Http;
 
 /**
  * @OA\Schema(
@@ -87,7 +88,6 @@ class AnimalesController extends Controller
      */
     public function store(Request $request)
     {
-        
         // Validar los datos recibidos en la solicitud
         $request->validate([
             'nombre' => 'required|string',
@@ -95,23 +95,37 @@ class AnimalesController extends Controller
             'tamano' => 'string',
             'edad' => 'integer',
             'descripcion' => 'string',
-            'image' => 'required|image|mimes:png,jpg,jpeg|max:2048', // Asegúrate de tener este campo en tu formulario
+            'image' => 'required|image|mimes:png,jpg,jpeg|max:2048',
         ]);
 
-        // Llamar al método storeImage para manejar la subida y almacenamiento de la imagen
-        $imageName = ImageController::storeImage($request);
+        // Obtener la URL de la ruta '/upload-image'
+        $uploadImageUrl = route('image.store');
 
-        // Crear un nuevo animal y asignar el nombre de la imagen a imagen_path
-        $animal = Animal::create([
-            'nombre' => $request->input('nombre'),
-            'especie' => $request->input('especie'),
-            'tamano' => $request->input('tamano'),
-            'edad' => $request->input('edad'),
-            'descripcion' => $request->input('descripcion'),
-            'imagen_path' => $imageName, // Asignar el nombre de la imagen aquí
+        // Realizar una petición POST a la ruta '/upload-image' con los datos del formulario
+        $response = Http::asMultipart()->post($uploadImageUrl, [
+            'image' => $request->file('image'),  // Puedes necesitar ajustar esto dependiendo de cómo esté definido tu campo de imagen
         ]);
 
-        return response()->json($animal, 201);
+        // Verificar si la petición fue exitosa
+        if ($response->successful()) {
+            // Obtener el nombre de la imagen desde la respuesta
+            $imageName = $response->json('image');
+
+            // Crear un nuevo animal y asignar el nombre de la imagen a imagen_path
+            $animal = Animal::create([
+                'nombre' => $request->input('nombre'),
+                'especie' => $request->input('especie'),
+                'tamano' => $request->input('tamano'),
+                'edad' => $request->input('edad'),
+                'descripcion' => $request->input('descripcion'),
+                'imagen_path' => $imageName,
+            ]);
+
+            return response()->json($animal, 201);
+        } else {
+            // Manejar la situación en la que la petición no fue exitosa
+            return response()->json(['error' => 'Error al subir la imagen'], $response->status());
+        }
     }
 
     /**
