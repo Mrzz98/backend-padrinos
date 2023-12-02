@@ -94,10 +94,7 @@ class AnimalesController extends Controller
             'image' => 'required|image|mimes:png,jpg,jpeg|max:2048'
         ]);
 
-        $imageName = time().'.'.$request->image->extension();
-
-        // Public Folder
-        $request->image->move(public_path('images'), $imageName);
+        $imageName = "a";
 
         // Crear un nuevo animal
         $animal = Animal::create([
