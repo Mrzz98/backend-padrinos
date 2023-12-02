@@ -160,7 +160,19 @@ class RescateController extends Controller
             'id_animal.tamano' => 'string',
             'id_animal.edad' => 'integer',
             'id_animal.descripcion' => 'string',
+            'id_animal.image' => 'string'
         ]);
+
+        $extension = explode('/', mime_content_type($request->image))[1];
+
+        // Generar un nombre único para la imagen
+        $imageName = time() . '.' . $extension;
+
+        // Decodificar la imagen base64 y guardarla en la carpeta de imágenes
+        file_put_contents(public_path('images/') . $imageName, base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->image)));
+
+        // Asignar la ruta de la imagen al campo image_path del modelo Animal
+        $request->merge(['id_animal.image_path' => $imageName]);
 
         // Crear el animal
         $animal = Animal::create($request->input('id_animal'));
@@ -173,7 +185,6 @@ class RescateController extends Controller
 
         return response()->json($rescate, 201);
     }
-
     /**
      * @OA\Get(
      *     path="/rescates/{id}",
