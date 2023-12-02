@@ -98,18 +98,16 @@ class AnimalesController extends Controller
             'image' => 'required|image|mimes:png,jpg,jpeg|max:2048',
         ]);
 
-        // Obtener la URL de la ruta '/upload-image'
-        $uploadImageUrl = route('image.store');
+        $imageName = time().'.'.$request->image->extension();
 
-        // Realizar una petición POST a la ruta '/upload-image' con los datos del formulario
-        $response = Http::asMultipart()->post($uploadImageUrl, [
-            'image' => $request->file('image'),  // Puedes necesitar ajustar esto dependiendo de cómo esté definido tu campo de imagen
-        ]);
+        // Public Folder
+        $request->image->move(public_path('images'), $imageName);
+        
 
-        // Verificar si la petición fue exitosa
-        if ($response->successful()) {
+        
+        // if ($response->successful()) {
             // Obtener el nombre de la imagen desde la respuesta
-            $imageName = $response->json('image');
+            
 
             // Crear un nuevo animal y asignar el nombre de la imagen a imagen_path
             $animal = Animal::create([
@@ -122,10 +120,10 @@ class AnimalesController extends Controller
             ]);
 
             return response()->json($animal, 201);
-        } else {
+        // } else {
             // Manejar la situación en la que la petición no fue exitosa
-            return response()->json(['error' => 'Error al subir la imagen'], $response->status());
-        }
+            // return response()->json(['error' => 'Error al subir la imagen'], $response->status());
+        // }
     }
 
     /**
