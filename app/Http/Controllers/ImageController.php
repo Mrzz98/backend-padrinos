@@ -19,7 +19,8 @@ class ImageController extends Controller
             'image' => 'required|image|mimes:png,jpg,jpeg|max:2048'
         ]);
 
-        $imageName = "a";
+        $imageName = 'a.' . $request->image->extension();
+
 
         // Public Folder
         $request->image->move(public_path('images'), $imageName);
