@@ -113,7 +113,7 @@ class AnimalesController extends Controller
         // // Decodificar la imagen base64 y guardarla en la carpeta de imágenes
         // file_put_contents(public_path('images/') . $imageName, base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->image)));
         // Decodificar la imagen base64
-        $image = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->image));
+        // $image = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->image));
 
         // Crear un nuevo animal
         $animal = Animal::create([
@@ -122,7 +122,7 @@ class AnimalesController extends Controller
             'tamano' => $request->input('tamano'),
             'edad' => $request->input('edad'),
             'descripcion' => $request->input('descripcion'),
-            'imagen_path' => $image,
+            'imagen_path' => $request->input('image'),
         ]);
 
         return response()->json($animal, 201);
