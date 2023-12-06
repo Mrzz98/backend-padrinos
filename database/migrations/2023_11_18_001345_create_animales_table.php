@@ -20,7 +20,7 @@ class CreateAnimalesTable extends Migration
             $table->string('tamano')->nullable();
             $table->integer('edad')->nullable();
             $table->string('descripcion');
-            $table->string('imagen_path')->nullable();
+            $table->binary('imagen_path')->nullable();
             $table->timestamps();
         });
     }

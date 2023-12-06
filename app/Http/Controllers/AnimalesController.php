@@ -103,62 +103,30 @@ class AnimalesController extends Controller
             'image' => 'required|string'
         ]);
 
+        // if ($request->has('image') && is_string($request->image)) {
         // Obtener la extensión de la imagen
-        $extension = explode('/', mime_content_type($request->image))[1];
+        // $extension = explode('/', mime_content_type($request->image))[1];
 
-        // Generar un nombre único para la imagen
-        $imageName = time() . '.' . $extension;
+        // // Generar un nombre único para la imagen
+        // $imageName = time() . '.' . $extension;
 
+        // // Decodificar la imagen base64 y guardarla en la carpeta de imágenes
+        // file_put_contents(public_path('images/') . $imageName, base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->image)));
         // Decodificar la imagen base64
-        $imageData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->image));
+        $image = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->image));
 
-        $base64Image = base64_encode($imageData);
-        // Concatenar los datos de la imagen con la extensión y almacenar en el campo imagen_path
+        // Crear un nuevo animal
         $animal = Animal::create([
             'nombre' => $request->input('nombre'),
             'especie' => $request->input('especie'),
             'tamano' => $request->input('tamano'),
             'edad' => $request->input('edad'),
             'descripcion' => $request->input('descripcion'),
-            'imagen_path' => $base64Image,
+            'imagen_path' => $image,
         ]);
 
         return response()->json($animal, 201);
     }
-    // public function store(Request $request)
-    // {
-    //     // Validar los datos recibidos en la solicitud
-    //     $request->validate([
-    //         'nombre' => 'required|string',
-    //         'especie' => 'required|string',
-    //         'tamano' => 'string',
-    //         'edad' => 'integer',
-    //         'descripcion' => 'string',
-    //         'image' => 'required|string'
-    //     ]);
-
-    //     // if ($request->has('image') && is_string($request->image)) {
-    //     // Obtener la extensión de la imagen
-    //     $extension = explode('/', mime_content_type($request->image))[1];
-
-    //     // Generar un nombre único para la imagen
-    //     $imageName = time() . '.' . $extension;
-
-    //     // Decodificar la imagen base64 y guardarla en la carpeta de imágenes
-    //     file_put_contents(public_path('images/') . $imageName, base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->image)));
-
-    //     // Crear un nuevo animal
-    //     $animal = Animal::create([
-    //         'nombre' => $request->input('nombre'),
-    //         'especie' => $request->input('especie'),
-    //         'tamano' => $request->input('tamano'),
-    //         'edad' => $request->input('edad'),
-    //         'descripcion' => $request->input('descripcion'),
-    //         'imagen_path' => $imageName,
-    //     ]);
-
-    //     return response()->json($animal, 201);
-    // }
 
     /**
      * @OA\Get(
