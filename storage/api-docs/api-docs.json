@@ -385,6 +385,115 @@
                     }
                 }
             },
+            "put": {
+                "tags": [
+                    "Animales"
+                ],
+                "summary": "Actualizar información de un animal",
+                "description": "Actualizar la información de un animal existente.",
+                "operationId": "updateAnimal",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del animal a actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Nuevos datos del animal",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Nuevo Nombre"
+                                    },
+                                    "especie": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Nueva Especie"
+                                    },
+                                    "tamano": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Nuevo tamaño"
+                                    },
+                                    "edad": {
+                                        "type": "integer",
+                                        "format": "int",
+                                        "example": 4
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Nueva descripción del animal"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Nueva STRING de Imagen en base64"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Animal actualizado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/animal"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Animal no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Animal no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error de validación"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "delete": {
                 "tags": [
                     "Animales"
