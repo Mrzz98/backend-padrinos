@@ -70,6 +70,7 @@ class AnimalesController extends Controller
      *             @OA\Property(property="tamano", type="string", format="string", example="tamano"),
      *             @OA\Property(property="edad", type="integer", format="int", example=3),
      *             @OA\Property(property="descripcion", type="string", format="string", example="Descripción del animal"),
+     *             @OA\Property(property="image", type="string", format="string", example="STRING de Imagen en base64"),
      *         )
      *     ),
      *     @OA\Response(
@@ -103,19 +104,6 @@ class AnimalesController extends Controller
             'image' => 'required|string'
         ]);
 
-        // if ($request->has('image') && is_string($request->image)) {
-        // Obtener la extensión de la imagen
-        // $extension = explode('/', mime_content_type($request->image))[1];
-
-        // // Generar un nombre único para la imagen
-        // $imageName = time() . '.' . $extension;
-
-        // // Decodificar la imagen base64 y guardarla en la carpeta de imágenes
-        // file_put_contents(public_path('images/') . $imageName, base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->image)));
-        // Decodificar la imagen base64
-        // $image = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->image));
-
-        // Crear un nuevo animal
         $animal = Animal::create([
             'nombre' => $request->input('nombre'),
             'especie' => $request->input('especie'),
@@ -197,6 +185,87 @@ class AnimalesController extends Controller
 
         return $pdf->stream('reporte_animales.pdf');
     }
+
+
+    /**
+     * @OA\Put(
+     *     path="/animales/{id}",
+     *     tags={"Animales"},
+     *     summary="Actualizar información de un animal",
+     *     description="Actualizar la información de un animal existente.",
+     *     operationId="updateAnimal",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID del animal a actualizar",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Nuevos datos del animal",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="nombre", type="string", format="string", example="Nuevo Nombre"),
+     *             @OA\Property(property="especie", type="string", format="string", example="Nueva Especie"),
+     *             @OA\Property(property="tamano", type="string", format="string", example="Nuevo tamaño"),
+     *             @OA\Property(property="edad", type="integer", format="int", example=4),
+     *             @OA\Property(property="descripcion", type="string", format="string", example="Nueva descripción del animal"),
+     *             @OA\Property(property="image", type="string", format="string", example="Nueva STRING de Imagen en base64"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Animal actualizado exitosamente",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             ref="#/components/schemas/animal"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Animal no encontrado",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Animal no encontrado"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validación fallida",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Error de validación"),
+     *             @OA\Property(property="errors", type="object"),
+     *         )
+     *     )
+     * )
+     */
+    public function update(Request $request, $id)
+    {
+        // Validar los datos recibidos en la solicitud
+        $request->validate([
+            'nombre' => 'string',
+            'especie' => 'string',
+            'tamano' => 'string',
+            'edad' => 'integer',
+            'descripcion' => 'string',
+            'image' => 'string',
+        ]);
+
+        // Buscar el animal por ID
+        $animal = Animal::find($id);
+
+        // Verificar si el animal existe
+        if (!$animal) {
+            return response()->json(['error' => 'Animal no encontrado'], 404);
+        }
+
+        // Actualizar los datos del animal
+        $animal->update($request->all());
+
+        return response()->json($animal, 200);
+    }
+
 
     /**
      * @OA\Delete(

@@ -292,6 +292,11 @@
                                         "type": "string",
                                         "format": "string",
                                         "example": "Descripción del animal"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "STRING de Imagen en base64"
                                     }
                                 },
                                 "type": "object"
@@ -358,6 +363,59 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/animal"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Animal no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Animal no encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Animales"
+                ],
+                "summary": "Eliminar un animal",
+                "description": "Elimina un animal por su ID.",
+                "operationId": "destroyAnimal",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del animal a eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Animal eliminado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Animal eliminado con éxito"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
